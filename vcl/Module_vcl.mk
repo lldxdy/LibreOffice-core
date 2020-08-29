@@ -42,6 +42,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
             $(if $(filter LINUX MACOSX SOLARIS WNT %BSD,$(OS)), \
                 Executable_vcldemo \
                 Executable_icontest \
+                Executable_benchmark \
                 Executable_visualbackendtest \
                 Executable_mtfdemo \
             ) \
