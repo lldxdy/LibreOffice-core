@@ -18,327 +18,383 @@
  */
 
 #include <svgtoken.hxx>
-#include <unordered_map>
+#include <frozen/map.h>
 
 namespace svgio::svgreader
 {
-        const char aSVGStrWidth[] = "width";
-        const char aSVGStrHeight[] = "height";
-        const char aSVGStrViewBox[] = "viewBox";
-        const char aSVGStrTransform[] = "transform";
-        const char aSVGStrStyle[] = "style";
-        const char aSVGStrDisplay[] = "display"; // #i121656#
-        const char aSVGStrD[] = "d";
-        const char aSVGStrX[] = "x";
-        const char aSVGStrY[] = "y";
-        const char aSVGStrXmlns[] = "xmlns";
-        const char aSVGStrVersion[] = "version";
-        const char aSVGStrId[] = "id";
-        const char aSVGStrRx[] = "rx";
-        const char aSVGStrRy[] = "ry";
-        const char aSVGStrPoints[] = "points";
-        const char aSVGStrDx[] = "dx";
-        const char aSVGStrDy[] = "dy";
-        const char aSVGStrRotate[] = "rotate";
-        const char aSVGStrTextLength[] = "textLength";
-        const char aSVGStrLengthAdjust[] = "lengthAdjust";
-        const char aSVGStrFont[] = "font";
-        const char aSVGStrFontFamily[] = "font-family";
-        const char aSVGStrFontSize[] = "font-size";
-        const char aSVGStrFontSizeAdjust[] = "font-size-adjust";
-        const char aSVGStrFontStretch[] = "font-stretch";
-        const char aSVGStrFontStyle[] = "font-style";
-        const char aSVGStrFontVariant[] = "font-variant";
-        const char aSVGStrFontWeight[] = "font-weight";
-        const char aSVGStrDirection[] = "direction";
-        const char aSVGStrLetterSpacing[] = "letter-spacing";
-        const char aSVGStrTextDecoration[] = "text-decoration";
-        const char aSVGStrUnicodeBidi[] = "unicode-bidi";
-        const char aSVGStrWordSpacing[] = "word-spacing";
-        const char aSVGStrTspan[] = "tspan";
-        const char aSVGStrTref[] = "tref";
-        const char aSVGStrTextPath[] = "textPath";
-        const char aSVGStrStartOffset[] = "startOffset";
-        const char aSVGStrMethod[] = "method";
-        const char aSVGStrSpacing[] = "spacing";
-        const char aSVGStrTextAlign[] = "text-align";
-        const char aSVGStrPathLength[] = "pathLength";
-        const char aSVGStrType[] = "type";
-        const char aSVGStrClass[] = "class";
-        const char aSVGStrTextAnchor[] = "text-anchor";
-        const char aSVGStrXmlSpace[] = "xml:space";
-        const char aSVGStrColor[] = "color";
-        const char aSVGStrClipPathNode[] = "clipPath";
-        const char aSVGStrClipPathProperty[] = "clip-path";
-        const char aSVGStrMask[] = "mask";
-        const char aSVGStrClipPathUnits[] = "clipPathUnits";
-        const char aSVGStrMaskUnits[] = "maskUnits";
-        const char aSVGStrMaskContentUnits[] = "maskContentUnits";
-        const char aSVGStrClipRule[] = "clip-rule";
-        const char aSVGStrMarker[] = "marker";
-        const char aSVGStrMarkerStart[] = "marker-start";
-        const char aSVGStrMarkerMid[] = "marker-mid";
-        const char aSVGStrMarkerEnd[] = "marker-end";
-        const char aSVGStrRefX[] = "refX";
-        const char aSVGStrRefY[] = "refY";
-        const char aSVGStrMarkerUnits[] = "markerUnits";
-        const char aSVGStrMarkerWidth[] = "markerWidth";
-        const char aSVGStrMarkerHeight[] = "markerHeight";
-        const char aSVGStrOrient[] = "orient";
-        const char aSVGStrPattern[] = "pattern";
-        const char aSVGStrPatternUnits[] = "patternUnits";
-        const char aSVGStrPatternContentUnits[] = "patternContentUnits";
-        const char aSVGStrPatternTransform[] = "patternTransform";
-        const char aSVGStrOpacity[] = "opacity";
-        const char aSVGStrVisibility[] = "visibility";
-        constexpr OUStringLiteral aSVGStrTitle = u"title";
-        constexpr OUStringLiteral aSVGStrDesc = u"desc";
+        constexpr const std::u16string_view constToken_Width = u"width";
+        constexpr const std::u16string_view constToken_Height = u"height";
+        constexpr const std::u16string_view constToken_ViewBox = u"viewBox";
+        constexpr const std::u16string_view constTokenLowercase_ViewBox = u"viewbox";
+        constexpr const std::u16string_view constToken_Transform = u"transform";
+        constexpr const std::u16string_view constToken_Style = u"style";
+        constexpr const std::u16string_view constToken_Display = u"display"; // #i121656#
+        constexpr const std::u16string_view constToken_D = u"d";
+        constexpr const std::u16string_view constToken_X = u"x";
+        constexpr const std::u16string_view constToken_Y = u"y";
+        constexpr const std::u16string_view constToken_Xmlns = u"xmlns";
+        constexpr const std::u16string_view constToken_Version = u"version";
+        constexpr const std::u16string_view constToken_Id = u"id";
+        constexpr const std::u16string_view constToken_Rx = u"rx";
+        constexpr const std::u16string_view constToken_Ry = u"ry";
+        constexpr const std::u16string_view constToken_Points = u"points";
+        constexpr const std::u16string_view constToken_Dx = u"dx";
+        constexpr const std::u16string_view constToken_Dy = u"dy";
+        constexpr const std::u16string_view constToken_Rotate = u"rotate";
+        constexpr const std::u16string_view constToken_TextLength = u"textLength";
+        constexpr const std::u16string_view constTokenLowercase_TextLength = u"textlength";
+        constexpr const std::u16string_view constToken_LengthAdjust = u"lengthAdjust";
+        constexpr const std::u16string_view constTokenLowercase_LengthAdjust = u"lengthadjust";
+        constexpr const std::u16string_view constToken_Font = u"font";
+        constexpr const std::u16string_view constToken_FontFamily = u"font-family";
+        constexpr const std::u16string_view constToken_FontSize = u"font-size";
+        constexpr const std::u16string_view constToken_FontSizeAdjust = u"font-size-adjust";
+        constexpr const std::u16string_view constToken_FontStretch = u"font-stretch";
+        constexpr const std::u16string_view constToken_FontStyle = u"font-style";
+        constexpr const std::u16string_view constToken_FontVariant = u"font-variant";
+        constexpr const std::u16string_view constToken_FontWeight = u"font-weight";
+        constexpr const std::u16string_view constToken_Direction = u"direction";
+        constexpr const std::u16string_view constToken_LetterSpacing = u"letter-spacing";
+        constexpr const std::u16string_view constToken_TextDecoration = u"text-decoration";
+        constexpr const std::u16string_view constToken_UnicodeBidi = u"unicode-bidi";
+        constexpr const std::u16string_view constToken_WordSpacing = u"word-spacing";
+        constexpr const std::u16string_view constToken_Tspan = u"tspan";
+        constexpr const std::u16string_view constToken_Tref = u"tref";
+        constexpr const std::u16string_view constToken_TextPath = u"textPath";
+        constexpr const std::u16string_view constTokenLowercase_TextPath = u"textpath";
+        constexpr const std::u16string_view constToken_StartOffset = u"startOffset";
+        constexpr const std::u16string_view constTokenLowercase_StartOffset = u"startoffset";
+        constexpr const std::u16string_view constToken_Method = u"method";
+        constexpr const std::u16string_view constToken_Spacing = u"spacing";
+        constexpr const std::u16string_view constToken_TextAlign = u"text-align";
+        constexpr const std::u16string_view constToken_PathLength = u"pathLength";
+        constexpr const std::u16string_view constTokenLowercase_PathLength = u"pathlength";
+        constexpr const std::u16string_view constToken_Type = u"type";
+        constexpr const std::u16string_view constToken_Class = u"class";
+        constexpr const std::u16string_view constToken_TextAnchor = u"text-anchor";
+        constexpr const std::u16string_view constToken_XmlSpace = u"xml:space";
+        constexpr const std::u16string_view constToken_Color = u"color";
+        constexpr const std::u16string_view constToken_ClipPathNode = u"clipPath";
+        constexpr const std::u16string_view constTokenLowercase_ClipPathNode = u"clippath";
+        constexpr const std::u16string_view constToken_ClipPathProperty = u"clip-path";
+        constexpr const std::u16string_view constToken_Mask = u"mask";
+        constexpr const std::u16string_view constToken_ClipPathUnits = u"clipPathUnits";
+        constexpr const std::u16string_view constTokenLowercase_ClipPathUnits = u"clippathunits";
+        constexpr const std::u16string_view constToken_MaskUnits = u"maskUnits";
+        constexpr const std::u16string_view constTokenLowercase_MaskUnits = u"maskunits";
+        constexpr const std::u16string_view constToken_MaskContentUnits = u"maskContentUnits";
+        constexpr const std::u16string_view constTokenLowercase_MaskContentUnits = u"maskcontentunits";
+        constexpr const std::u16string_view constToken_ClipRule = u"clip-rule";
+        constexpr const std::u16string_view constToken_Marker = u"marker";
+        constexpr const std::u16string_view constToken_MarkerStart = u"marker-start";
+        constexpr const std::u16string_view constToken_MarkerMid = u"marker-mid";
+        constexpr const std::u16string_view constToken_MarkerEnd = u"marker-end";
+        constexpr const std::u16string_view constToken_RefX = u"refX";
+        constexpr const std::u16string_view constToken_RefY = u"refY";
+        constexpr const std::u16string_view constToken_MarkerUnits = u"markerUnits";
+        constexpr const std::u16string_view constTokenLowercase_MarkerUnits = u"markerunits";
+        constexpr const std::u16string_view constToken_MarkerWidth = u"markerWidth";
+        constexpr const std::u16string_view constTokenLowercase_MarkerWidth = u"markerwidth";
+        constexpr const std::u16string_view constToken_MarkerHeight = u"markerHeight";
+        constexpr const std::u16string_view constTokenLowercase_MarkerHeight = u"markerheight";
+        constexpr const std::u16string_view constToken_Orient = u"orient";
+        constexpr const std::u16string_view constToken_Pattern = u"pattern";
+        constexpr const std::u16string_view constToken_PatternUnits = u"patternUnits";
+        constexpr const std::u16string_view constTokenLowercase_PatternUnits = u"patternunits";
+        constexpr const std::u16string_view constToken_PatternContentUnits = u"patternContentUnits";
+        constexpr const std::u16string_view constTokenLowercase_PatternContentUnits = u"patterncontentunits";
+        constexpr const std::u16string_view constToken_PatternTransform = u"patternTransform";
+        constexpr const std::u16string_view constTokenLowercase_PatternTransform = u"patterntransform";
+        constexpr const std::u16string_view constToken_Opacity = u"opacity";
+        constexpr const std::u16string_view constToken_Visibility = u"visibility";
+        constexpr const std::u16string_view constToken_Title = u"title";
+        constexpr const std::u16string_view constToken_Desc = u"desc";
 
-        const char aSVGStrPreserveAspectRatio[] = "preserveAspectRatio";
-        const char aSVGStrDefer[] = "defer";
-        const char aSVGStrNone[] = "none";
-        const char aSVGStrXMinYMin[] = "xMinYMin";
-        const char aSVGStrXMidYMin[] = "xMidYMin";
-        const char aSVGStrXMaxYMin[] = "xMaxYMin";
-        const char aSVGStrXMinYMid[] = "xMinYMid";
-        const char aSVGStrXMidYMid[] = "xMidYMid";
-        const char aSVGStrXMaxYMid[] = "xMaxYMid";
-        const char aSVGStrXMinYMax[] = "xMinYMax";
-        const char aSVGStrXMidYMax[] = "xMidYMax";
-        const char aSVGStrXMaxYMax[] = "xMaxYMax";
-        const char aSVGStrMeet[] = "meet";
-        const char aSVGStrSlice[] = "slice";
+        constexpr const std::u16string_view constToken_PreserveAspectRatio = u"preserveAspectRatio";
+        constexpr const std::u16string_view constTokenLowercase_PreserveAspectRatio = u"preserveaspectratio";
+        constexpr const std::u16string_view constToken_Defer = u"defer";
+        constexpr const std::u16string_view constToken_None = u"none";
+        constexpr const std::u16string_view constToken_XMinYMin = u"xMinYMin";
+        constexpr const std::u16string_view constTokenLowercase_XMinYMin = u"xminymin";
+        constexpr const std::u16string_view constToken_XMidYMin = u"xMidYMin";
+        constexpr const std::u16string_view constTokenLowercase_XMidYMin = u"xmidymin";
+        constexpr const std::u16string_view constToken_XMaxYMin = u"xMaxYMin";
+        constexpr const std::u16string_view constTokenLowercase_XMaxYMin = u"xmaxymin";
+        constexpr const std::u16string_view constToken_XMinYMid = u"xMinYMid";
+        constexpr const std::u16string_view constTokenLowercase_XMinYMid = u"xminymid";
+        constexpr const std::u16string_view constToken_XMidYMid = u"xMidYMid";
+        constexpr const std::u16string_view constTokenLowercase_XMidYMid = u"xmidymid";
+        constexpr const std::u16string_view constToken_XMaxYMid = u"xMaxYMid";
+        constexpr const std::u16string_view constTokenLowercase_XMaxYMid = u"xmaxymid";
+        constexpr const std::u16string_view constToken_XMinYMax = u"xMinYMax";
+        constexpr const std::u16string_view constTokenLowercase_XMinYMax = u"xminymax";
+        constexpr const std::u16string_view constToken_XMidYMax = u"xMidYMax";
+        constexpr const std::u16string_view constTokenLowercase_XMidYMax = u"xmidymax";
+        constexpr const std::u16string_view constToken_XMaxYMax = u"xMaxYMax";
+        constexpr const std::u16string_view constTokenLowercase_XMaxYMax = u"xmaxymax";
+        constexpr const std::u16string_view constToken_Meet = u"meet";
+        constexpr const std::u16string_view constToken_Slice = u"slice";
 
-        const char aSVGStrDefs[] = "defs";
-        const char aSVGStrG[] = "g";
-        const char aSVGStrSvg[] = "svg";
-        const char aSVGStrSymbol[] = "symbol";
-        const char aSVGStrUse[] = "use";
-        const char aSVGStrA[] = "a";
+        constexpr const std::u16string_view constToken_Defs = u"defs";
+        constexpr const std::u16string_view constToken_G = u"g";
+        constexpr const std::u16string_view constToken_Svg = u"svg";
+        constexpr const std::u16string_view constToken_Symbol = u"symbol";
+        constexpr const std::u16string_view constToken_Use = u"use";
+        constexpr const std::u16string_view constToken_A = u"a";
 
-        const char aSVGStrCircle[] = "circle";
-        const char aSVGStrEllipse[] = "ellipse";
-        const char aSVGStrLine[] = "line";
-        const char aSVGStrPath[] = "path";
-        const char aSVGStrPolygon[] = "polygon";
-        const char aSVGStrPolyline[] = "polyline";
-        const char aSVGStrRect[] = "rect";
-        const char aSVGStrImage[] = "image";
+        constexpr const std::u16string_view constToken_Circle = u"circle";
+        constexpr const std::u16string_view constToken_Ellipse = u"ellipse";
+        constexpr const std::u16string_view constToken_Line = u"line";
+        constexpr const std::u16string_view constToken_Path = u"path";
+        constexpr const std::u16string_view constToken_Polygon = u"polygon";
+        constexpr const std::u16string_view constToken_Polyline = u"polyline";
+        constexpr const std::u16string_view constToken_Rect = u"rect";
+        constexpr const std::u16string_view constToken_Image = u"image";
 
-        const char aSVGStrLinearGradient[] = "linearGradient";
-        const char aSVGStrRadialGradient[] = "radialGradient";
-        const char aSVGStrStop[] = "stop";
-        const char aSVGStrOffset[] = "offset";
-        const char aSVGStrX1[] = "x1";
-        const char aSVGStrY1[] = "y1";
-        const char aSVGStrX2[] = "x2";
-        const char aSVGStrY2[] = "y2";
-        const char aSVGStrCx[] = "cx";
-        const char aSVGStrCy[] = "cy";
-        const char aSVGStrFx[] = "fx";
-        const char aSVGStrFy[] = "fy";
-        const char aSVGStrR[] = "r";
-        const char aSVGStrGradientUnits[] = "gradientUnits";
-        const char aSVGStrGradientTransform[] = "gradientTransform";
-        const char aSVGStrSpreadMethod[] = "spreadMethod";
-        const char aSVGStrHref[] = "href";
-        const char aSVGStrXlinkHref[] = "xlink:href";
-        const char aSVGStrStopColor[] = "stop-color";
-        const char aSVGStrStopOpacity[] = "stop-opacity";
+        constexpr const std::u16string_view constToken_LinearGradient = u"linearGradient";
+        constexpr const std::u16string_view constTokenLowercase_LinearGradient = u"lineargradient";
+        constexpr const std::u16string_view constToken_RadialGradient = u"radialGradient";
+        constexpr const std::u16string_view constTokenLowercase_RadialGradient = u"radialgradient";
+        constexpr const std::u16string_view constToken_Stop = u"stop";
+        constexpr const std::u16string_view constToken_Offset = u"offset";
+        constexpr const std::u16string_view constToken_X1 = u"x1";
+        constexpr const std::u16string_view constToken_Y1 = u"y1";
+        constexpr const std::u16string_view constToken_X2 = u"x2";
+        constexpr const std::u16string_view constToken_Y2 = u"y2";
+        constexpr const std::u16string_view constToken_Cx = u"cx";
+        constexpr const std::u16string_view constToken_Cy = u"cy";
+        constexpr const std::u16string_view constToken_Fx = u"fx";
+        constexpr const std::u16string_view constToken_Fy = u"fy";
+        constexpr const std::u16string_view constToken_R = u"r";
+        constexpr const std::u16string_view constToken_GradientUnits = u"gradientUnits";
+        constexpr const std::u16string_view constTokenLowercase_GradientUnits = u"gradientunits";
+        constexpr const std::u16string_view constToken_GradientTransform = u"gradientTransform";
+        constexpr const std::u16string_view constTokenLowercase_GradientTransform = u"gradienttransform";
+        constexpr const std::u16string_view constToken_SpreadMethod = u"spreadMethod";
+        constexpr const std::u16string_view constTokenLowercase_SpreadMethod = u"spreadmethod";
+        constexpr const std::u16string_view constToken_Href = u"href";
+        constexpr const std::u16string_view constToken_XlinkHref = u"xlink:href";
+        constexpr const std::u16string_view constToken_StopColor = u"stop-color";
+        constexpr const std::u16string_view constToken_StopOpacity = u"stop-opacity";
 
-        const char aSVGStrFill[] = "fill";
-        const char aSVGStrFillOpacity[] = "fill-opacity";
-        const char aSVGStrFillRule[] = "fill-rule";
+        constexpr const std::u16string_view constToken_Fill = u"fill";
+        constexpr const std::u16string_view constToken_FillOpacity = u"fill-opacity";
+        constexpr const std::u16string_view constToken_FillRule = u"fill-rule";
 
-        const char aSVGStrStroke[] = "stroke";
-        const char aSVGStrStrokeDasharray[] = "stroke-dasharray";
-        const char aSVGStrStrokeDashoffset[] = "stroke-dashoffset";
-        const char aSVGStrStrokeLinecap[] = "stroke-linecap";
-        const char aSVGStrStrokeLinejoin[] = "stroke-linejoin";
-        const char aSVGStrStrokeMiterlimit[] = "stroke-miterlimit";
-        const char aSVGStrStrokeOpacity[] = "stroke-opacity";
-        const char aSVGStrStrokeWidth[] = "stroke-width";
+        constexpr const std::u16string_view constToken_Stroke = u"stroke";
+        constexpr const std::u16string_view constToken_StrokeDasharray = u"stroke-dasharray";
+        constexpr const std::u16string_view constToken_StrokeDashoffset = u"stroke-dashoffset";
+        constexpr const std::u16string_view constToken_StrokeLinecap = u"stroke-linecap";
+        constexpr const std::u16string_view constToken_StrokeLinejoin = u"stroke-linejoin";
+        constexpr const std::u16string_view constToken_StrokeMiterlimit = u"stroke-miterlimit";
+        constexpr const std::u16string_view constToken_StrokeOpacity = u"stroke-opacity";
+        constexpr const std::u16string_view constToken_StrokeWidth = u"stroke-width";
 
-        const char aSVGStrText[] = "text";
-        const char aSVGStrBaselineShift[] = "baseline-shift";
+        constexpr const std::u16string_view constToken_Text = u"text";
+        constexpr const std::u16string_view constToken_BaselineShift = u"baseline-shift";
 
-        const char aSVGStrFlowRoot[] = "flowRoot";
+        constexpr const std::u16string_view constToken_FlowRoot = u"flowRoot";
+        constexpr const std::u16string_view constTokenLowercase_FlowRoot = u"flowroot";
+
+        static constexpr frozen::map<std::u16string_view, SVGToken, 133> aSVGTokenMapperList
+        {
+            { constToken_Width, SVGToken::Width },
+            { constToken_Height, SVGToken::Height },
+            { constToken_ViewBox, SVGToken::ViewBox },
+            { constToken_Transform, SVGToken::Transform },
+            { constToken_Style, SVGToken::Style },
+            { constToken_Display, SVGToken::Display }, // #i121656#
+            { constToken_D, SVGToken::D },
+            { constToken_X, SVGToken::X },
+            { constToken_Y, SVGToken::Y },
+            { constToken_Xmlns, SVGToken::Xmlns },
+            { constToken_Version, SVGToken::Version },
+            { constToken_Id, SVGToken::Id },
+            { constToken_Rx, SVGToken::Rx },
+            { constToken_Ry, SVGToken::Ry },
+            { constToken_Points, SVGToken::Points },
+            { constToken_Dx, SVGToken::Dx },
+            { constToken_Dy, SVGToken::Dy },
+            { constToken_Rotate, SVGToken::Rotate },
+            { constToken_TextLength, SVGToken::TextLength },
+            { constToken_LengthAdjust, SVGToken::LengthAdjust },
+            { constToken_Font, SVGToken::Font },
+            { constToken_FontFamily, SVGToken::FontFamily },
+            { constToken_FontSize, SVGToken::FontSize },
+            { constToken_FontSizeAdjust, SVGToken::FontSizeAdjust },
+            { constToken_FontStretch, SVGToken::FontStretch },
+            { constToken_FontStyle, SVGToken::FontStyle },
+            { constToken_FontVariant, SVGToken::FontVariant },
+            { constToken_FontWeight, SVGToken::FontWeight },
+            { constToken_Direction, SVGToken::Direction },
+            { constToken_LetterSpacing, SVGToken::LetterSpacing },
+            { constToken_TextDecoration, SVGToken::TextDecoration },
+            { constToken_UnicodeBidi, SVGToken::UnicodeBidi },
+            { constToken_WordSpacing, SVGToken::WordSpacing },
+            { constToken_Tspan, SVGToken::Tspan },
+            { constToken_Tref, SVGToken::Tref },
+            { constToken_TextPath, SVGToken::TextPath },
+            { constToken_StartOffset, SVGToken::StartOffset },
+            { constToken_Method, SVGToken::Method },
+            { constToken_Spacing, SVGToken::Spacing },
+            { constToken_TextAlign, SVGToken::TextAlign },
+            { constToken_PathLength, SVGToken::PathLength },
+            { constToken_Type, SVGToken::Type },
+            { constToken_Class, SVGToken::Class },
+            { constToken_TextAnchor, SVGToken::TextAnchor },
+            { constToken_XmlSpace, SVGToken::XmlSpace },
+            { constToken_Color, SVGToken::Color },
+            { constToken_ClipPathNode, SVGToken::ClipPathNode },
+            { constToken_ClipPathProperty, SVGToken::ClipPathProperty },
+            { constToken_Mask, SVGToken::Mask },
+            { constToken_ClipPathUnits, SVGToken::ClipPathUnits },
+            { constToken_MaskUnits, SVGToken::MaskUnits },
+            { constToken_MaskContentUnits, SVGToken::MaskContentUnits },
+            { constToken_ClipRule, SVGToken::ClipRule },
+            { constToken_Marker, SVGToken::Marker },
+            { constToken_MarkerStart, SVGToken::MarkerStart },
+            { constToken_MarkerMid, SVGToken::MarkerMid },
+            { constToken_MarkerEnd, SVGToken::MarkerEnd },
+            { constToken_RefX, SVGToken::RefX },
+            { constToken_RefY, SVGToken::RefY },
+            { constToken_MarkerUnits, SVGToken::MarkerUnits },
+            { constToken_MarkerWidth, SVGToken::MarkerWidth },
+            { constToken_MarkerHeight, SVGToken::MarkerHeight },
+            { constToken_Orient, SVGToken::Orient },
+            { constToken_Pattern, SVGToken::Pattern },
+            { constToken_PatternUnits, SVGToken::PatternUnits },
+            { constToken_PatternContentUnits, SVGToken::PatternContentUnits },
+            { constToken_PatternTransform, SVGToken::PatternTransform },
+            { constToken_Opacity, SVGToken::Opacity },
+            { constToken_Visibility, SVGToken::Visibility },
+            { constToken_Title, SVGToken::Title },
+            { constToken_Desc, SVGToken::Desc },
+
+            { constToken_PreserveAspectRatio, SVGToken::PreserveAspectRatio },
+            { constToken_Defer, SVGToken::Defer },
+            { constToken_None, SVGToken::None },
+            { constToken_XMinYMin, SVGToken::XMinYMin },
+            { constToken_XMidYMin, SVGToken::XMidYMin },
+            { constToken_XMaxYMin, SVGToken::XMaxYMin },
+            { constToken_XMinYMid, SVGToken::XMinYMid },
+            { constToken_XMidYMid, SVGToken::XMidYMid },
+            { constToken_XMaxYMid, SVGToken::XMaxYMid },
+            { constToken_XMinYMax, SVGToken::XMinYMax },
+            { constToken_XMidYMax, SVGToken::XMidYMax },
+            { constToken_XMaxYMax, SVGToken::XMaxYMax },
+            { constToken_Meet, SVGToken::Meet },
+            { constToken_Slice, SVGToken::Slice },
+
+            { constToken_Defs, SVGToken::Defs },
+            { constToken_G, SVGToken::G },
+            { constToken_Svg, SVGToken::Svg },
+            { constToken_Symbol, SVGToken::Symbol },
+            { constToken_Use, SVGToken::Use },
+            { constToken_A, SVGToken::A },
+
+            { constToken_Circle, SVGToken::Circle },
+            { constToken_Ellipse, SVGToken::Ellipse },
+            { constToken_Line, SVGToken::Line },
+            { constToken_Path, SVGToken::Path },
+            { constToken_Polygon, SVGToken::Polygon },
+            { constToken_Polyline, SVGToken::Polyline },
+            { constToken_Rect, SVGToken::Rect },
+            { constToken_Image, SVGToken::Image },
+
+            { constToken_LinearGradient, SVGToken::LinearGradient },
+            { constToken_RadialGradient, SVGToken::RadialGradient },
+            { constToken_Stop, SVGToken::Stop },
+            { constToken_Offset, SVGToken::Offset },
+            { constToken_X1, SVGToken::X1 },
+            { constToken_Y1, SVGToken::Y1 },
+            { constToken_X2, SVGToken::X2 },
+            { constToken_Y2, SVGToken::Y2 },
+            { constToken_Cx, SVGToken::Cx },
+            { constToken_Cy, SVGToken::Cy },
+            { constToken_Fx, SVGToken::Fx },
+            { constToken_Fy, SVGToken::Fy },
+            { constToken_R, SVGToken::R },
+            { constToken_GradientUnits, SVGToken::GradientUnits },
+            { constToken_GradientTransform, SVGToken::GradientTransform },
+            { constToken_SpreadMethod, SVGToken::SpreadMethod },
+            { constToken_Href, SVGToken::Href },
+            { constToken_XlinkHref, SVGToken::XlinkHref },
+            { constToken_StopColor, SVGToken::StopColor },
+            { constToken_StopOpacity, SVGToken::StopOpacity },
+
+            { constToken_Fill, SVGToken::Fill },
+            { constToken_FillOpacity, SVGToken::FillOpacity },
+            { constToken_FillRule, SVGToken::FillRule },
+
+            { constToken_Stroke, SVGToken::Stroke },
+            { constToken_StrokeDasharray, SVGToken::StrokeDasharray },
+            { constToken_StrokeDashoffset, SVGToken::StrokeDashoffset },
+            { constToken_StrokeLinecap, SVGToken::StrokeLinecap },
+            { constToken_StrokeLinejoin, SVGToken::StrokeLinejoin },
+            { constToken_StrokeMiterlimit, SVGToken::StrokeMiterlimit },
+            { constToken_StrokeOpacity, SVGToken::StrokeOpacity },
+            { constToken_StrokeWidth, SVGToken::StrokeWidth },
+
+            { constToken_Text, SVGToken::Text },
+            { constToken_BaselineShift, SVGToken::BaselineShift },
+            { constToken_FlowRoot, SVGToken::FlowRoot }
+        };
+
+        static constexpr frozen::map<std::u16string_view, SVGToken, 32> aLowerCaseList
+        {
+            { constTokenLowercase_ViewBox, SVGToken::ViewBox },
+            { constTokenLowercase_TextLength, SVGToken::TextLength },
+            { constTokenLowercase_LengthAdjust, SVGToken::LengthAdjust },
+            { constTokenLowercase_TextPath, SVGToken::TextPath },
+            { constTokenLowercase_StartOffset, SVGToken::StartOffset },
+            { constTokenLowercase_PathLength, SVGToken::PathLength },
+            { constTokenLowercase_ClipPathNode, SVGToken::ClipPathNode },
+            { constTokenLowercase_ClipPathUnits, SVGToken::ClipPathUnits },
+            { constTokenLowercase_MaskUnits, SVGToken::MaskUnits },
+            { constTokenLowercase_MaskContentUnits, SVGToken::MaskContentUnits },
+            { constTokenLowercase_MarkerUnits, SVGToken::MarkerUnits },
+            { constTokenLowercase_MarkerWidth, SVGToken::MarkerWidth },
+            { constTokenLowercase_MarkerHeight, SVGToken::MarkerHeight },
+            { constTokenLowercase_PatternUnits, SVGToken::PatternUnits },
+            { constTokenLowercase_PatternContentUnits, SVGToken::PatternContentUnits },
+            { constTokenLowercase_PatternTransform, SVGToken::PatternTransform },
+            { constTokenLowercase_PreserveAspectRatio, SVGToken::PreserveAspectRatio },
+            { constTokenLowercase_XMinYMin, SVGToken::XMinYMin },
+            { constTokenLowercase_XMidYMin, SVGToken::XMidYMin },
+            { constTokenLowercase_XMaxYMin, SVGToken::XMaxYMin },
+            { constTokenLowercase_XMinYMid, SVGToken::XMinYMid },
+            { constTokenLowercase_XMidYMid, SVGToken::XMidYMid },
+            { constTokenLowercase_XMaxYMid, SVGToken::XMaxYMid },
+            { constTokenLowercase_XMinYMax, SVGToken::XMinYMax },
+            { constTokenLowercase_XMidYMax, SVGToken::XMidYMax },
+            { constTokenLowercase_XMaxYMax, SVGToken::XMaxYMax },
+            { constTokenLowercase_LinearGradient, SVGToken::LinearGradient },
+            { constTokenLowercase_RadialGradient, SVGToken::RadialGradient },
+            { constTokenLowercase_GradientUnits, SVGToken::GradientUnits },
+            { constTokenLowercase_GradientTransform, SVGToken::GradientTransform },
+            { constTokenLowercase_SpreadMethod, SVGToken::SpreadMethod },
+            { constTokenLowercase_FlowRoot, SVGToken::FlowRoot }
+        };
 
         SVGToken StrToSVGToken(const OUString& rStr, bool bCaseIndependent)
         {
-            typedef std::unordered_map< OUString, SVGToken > SVGTokenMapper;
-            typedef std::pair< OUString, SVGToken > SVGTokenValueType;
-            static SVGTokenMapper aSVGTokenMapperList {
-                { aSVGStrWidth, SVGToken::Width },
-                { aSVGStrHeight, SVGToken::Height },
-                { aSVGStrViewBox, SVGToken::ViewBox },
-                { aSVGStrTransform, SVGToken::Transform },
-                { aSVGStrStyle, SVGToken::Style },
-                { aSVGStrDisplay, SVGToken::Display }, // #i121656#
-                { aSVGStrD, SVGToken::D },
-                { aSVGStrX, SVGToken::X },
-                { aSVGStrY, SVGToken::Y },
-                { aSVGStrXmlns, SVGToken::Xmlns },
-                { aSVGStrVersion, SVGToken::Version },
-                { aSVGStrId, SVGToken::Id },
-                { aSVGStrRx, SVGToken::Rx },
-                { aSVGStrRy, SVGToken::Ry },
-                { aSVGStrPoints, SVGToken::Points },
-                { aSVGStrDx, SVGToken::Dx },
-                { aSVGStrDy, SVGToken::Dy },
-                { aSVGStrRotate, SVGToken::Rotate },
-                { aSVGStrTextLength, SVGToken::TextLength },
-                { aSVGStrLengthAdjust, SVGToken::LengthAdjust },
-                { aSVGStrFont, SVGToken::Font },
-                { aSVGStrFontFamily, SVGToken::FontFamily },
-                { aSVGStrFontSize, SVGToken::FontSize },
-                { aSVGStrFontSizeAdjust, SVGToken::FontSizeAdjust },
-                { aSVGStrFontStretch, SVGToken::FontStretch },
-                { aSVGStrFontStyle, SVGToken::FontStyle },
-                { aSVGStrFontVariant, SVGToken::FontVariant },
-                { aSVGStrFontWeight, SVGToken::FontWeight },
-                { aSVGStrDirection, SVGToken::Direction },
-                { aSVGStrLetterSpacing, SVGToken::LetterSpacing },
-                { aSVGStrTextDecoration, SVGToken::TextDecoration },
-                { aSVGStrUnicodeBidi, SVGToken::UnicodeBidi },
-                { aSVGStrWordSpacing, SVGToken::WordSpacing },
-                { aSVGStrTspan, SVGToken::Tspan },
-                { aSVGStrTref, SVGToken::Tref },
-                { aSVGStrTextPath, SVGToken::TextPath },
-                { aSVGStrStartOffset, SVGToken::StartOffset },
-                { aSVGStrMethod, SVGToken::Method },
-                { aSVGStrSpacing, SVGToken::Spacing },
-                { aSVGStrTextAlign, SVGToken::TextAlign },
-                { aSVGStrPathLength, SVGToken::PathLength },
-                { aSVGStrType, SVGToken::Type },
-                { aSVGStrClass, SVGToken::Class },
-                { aSVGStrTextAnchor, SVGToken::TextAnchor },
-                { aSVGStrXmlSpace, SVGToken::XmlSpace },
-                { aSVGStrColor, SVGToken::Color },
-                { aSVGStrClipPathNode, SVGToken::ClipPathNode },
-                { aSVGStrClipPathProperty, SVGToken::ClipPathProperty },
-                { aSVGStrMask, SVGToken::Mask },
-                { aSVGStrClipPathUnits, SVGToken::ClipPathUnits },
-                { aSVGStrMaskUnits, SVGToken::MaskUnits },
-                { aSVGStrMaskContentUnits, SVGToken::MaskContentUnits },
-                { aSVGStrClipRule, SVGToken::ClipRule },
-                { aSVGStrMarker, SVGToken::Marker },
-                { aSVGStrMarkerStart, SVGToken::MarkerStart },
-                { aSVGStrMarkerMid, SVGToken::MarkerMid },
-                { aSVGStrMarkerEnd, SVGToken::MarkerEnd },
-                { aSVGStrRefX, SVGToken::RefX },
-                { aSVGStrRefY, SVGToken::RefY },
-                { aSVGStrMarkerUnits, SVGToken::MarkerUnits },
-                { aSVGStrMarkerWidth, SVGToken::MarkerWidth },
-                { aSVGStrMarkerHeight, SVGToken::MarkerHeight },
-                { aSVGStrOrient, SVGToken::Orient },
-                { aSVGStrPattern, SVGToken::Pattern },
-                { aSVGStrPatternUnits, SVGToken::PatternUnits },
-                { aSVGStrPatternContentUnits, SVGToken::PatternContentUnits },
-                { aSVGStrPatternTransform, SVGToken::PatternTransform },
-                { aSVGStrOpacity, SVGToken::Opacity },
-                { aSVGStrVisibility, SVGToken::Visibility },
-                { aSVGStrTitle, SVGToken::Title },
-                { aSVGStrDesc, SVGToken::Desc },
+            OUString aSearchString = rStr.startsWith("svg:") ? rStr.copy(4) : rStr;
 
-                { aSVGStrPreserveAspectRatio, SVGToken::PreserveAspectRatio },
-                { aSVGStrDefer, SVGToken::Defer },
-                { aSVGStrNone, SVGToken::None },
-                { aSVGStrXMinYMin, SVGToken::XMinYMin },
-                { aSVGStrXMidYMin, SVGToken::XMidYMin },
-                { aSVGStrXMaxYMin, SVGToken::XMaxYMin },
-                { aSVGStrXMinYMid, SVGToken::XMinYMid },
-                { aSVGStrXMidYMid, SVGToken::XMidYMid },
-                { aSVGStrXMaxYMid, SVGToken::XMaxYMid },
-                { aSVGStrXMinYMax, SVGToken::XMinYMax },
-                { aSVGStrXMidYMax, SVGToken::XMidYMax },
-                { aSVGStrXMaxYMax, SVGToken::XMaxYMax },
-                { aSVGStrMeet, SVGToken::Meet },
-                { aSVGStrSlice, SVGToken::Slice },
+            auto const aResult = aSVGTokenMapperList.find(aSearchString);
 
-                { aSVGStrDefs, SVGToken::Defs },
-                { aSVGStrG, SVGToken::G },
-                { aSVGStrSvg, SVGToken::Svg },
-                { aSVGStrSymbol, SVGToken::Symbol },
-                { aSVGStrUse, SVGToken::Use },
-                { aSVGStrA, SVGToken::A },
-
-                { aSVGStrCircle, SVGToken::Circle },
-                { aSVGStrEllipse, SVGToken::Ellipse },
-                { aSVGStrLine, SVGToken::Line },
-                { aSVGStrPath, SVGToken::Path },
-                { aSVGStrPolygon, SVGToken::Polygon },
-                { aSVGStrPolyline, SVGToken::Polyline },
-                { aSVGStrRect, SVGToken::Rect },
-                { aSVGStrImage, SVGToken::Image },
-
-                { aSVGStrLinearGradient, SVGToken::LinearGradient },
-                { aSVGStrRadialGradient, SVGToken::RadialGradient },
-                { aSVGStrStop, SVGToken::Stop },
-                { aSVGStrOffset, SVGToken::Offset },
-                { aSVGStrX1, SVGToken::X1 },
-                { aSVGStrY1, SVGToken::Y1 },
-                { aSVGStrX2, SVGToken::X2 },
-                { aSVGStrY2, SVGToken::Y2 },
-                { aSVGStrCx, SVGToken::Cx },
-                { aSVGStrCy, SVGToken::Cy },
-                { aSVGStrFx, SVGToken::Fx },
-                { aSVGStrFy, SVGToken::Fy },
-                { aSVGStrR, SVGToken::R },
-                { aSVGStrGradientUnits, SVGToken::GradientUnits },
-                { aSVGStrGradientTransform, SVGToken::GradientTransform },
-                { aSVGStrSpreadMethod, SVGToken::SpreadMethod },
-                { aSVGStrHref, SVGToken::Href },
-                { aSVGStrXlinkHref, SVGToken::XlinkHref },
-                { aSVGStrStopColor, SVGToken::StopColor },
-                { aSVGStrStopOpacity, SVGToken::StopOpacity },
-
-                { aSVGStrFill, SVGToken::Fill },
-                { aSVGStrFillOpacity, SVGToken::FillOpacity },
-                { aSVGStrFillRule, SVGToken::FillRule },
-
-                { aSVGStrStroke, SVGToken::Stroke },
-                { aSVGStrStrokeDasharray, SVGToken::StrokeDasharray },
-                { aSVGStrStrokeDashoffset, SVGToken::StrokeDashoffset },
-                { aSVGStrStrokeLinecap, SVGToken::StrokeLinecap },
-                { aSVGStrStrokeLinejoin, SVGToken::StrokeLinejoin },
-                { aSVGStrStrokeMiterlimit, SVGToken::StrokeMiterlimit },
-                { aSVGStrStrokeOpacity, SVGToken::StrokeOpacity },
-                { aSVGStrStrokeWidth, SVGToken::StrokeWidth },
-
-                { aSVGStrText, SVGToken::Text },
-                { aSVGStrBaselineShift, SVGToken::BaselineShift },
-                { aSVGStrFlowRoot, SVGToken::FlowRoot }
-            };
-
-            const SVGTokenMapper::const_iterator aResult(aSVGTokenMapperList.find(rStr.startsWith("svg:") ? rStr.copy(4) : rStr));
-
-            if(aResult == aSVGTokenMapperList.end())
+            if (aResult == aSVGTokenMapperList.end())
             {
-                if(bCaseIndependent)
+                if (bCaseIndependent)
                 {
-                    static SVGTokenMapper aCaseLindependentSVGTokenMapperList;
+                    auto const aResultLowerCase(aLowerCaseList.find(rStr.toAsciiLowerCase()));
 
-                    if(aCaseLindependentSVGTokenMapperList.empty())
-                    {
-                        for(const auto& rCurrent : aSVGTokenMapperList)
-                        {
-                            aCaseLindependentSVGTokenMapperList.insert(
-                                SVGTokenValueType(
-                                    rCurrent.first.toAsciiLowerCase(),
-                                    rCurrent.second));
-                        }
-                    }
-
-                    const SVGTokenMapper::const_iterator aResult2(aCaseLindependentSVGTokenMapperList.find(rStr.toAsciiLowerCase()));
-
-                    if(aResult2 == aCaseLindependentSVGTokenMapperList.end())
+                    if (aResultLowerCase == aLowerCaseList.end())
                     {
                         return SVGToken::Unknown;
                     }
                     else
                     {
-                        return aResult2->second;
+                        return aResultLowerCase->second;
                     }
                 }
 
@@ -352,12 +408,12 @@ namespace svgio::svgreader
 
         OUString getStrTitle()
         {
-            return aSVGStrTitle;
+            return OUString(constToken_Title);
         }
 
         OUString getStrDesc()
         {
-            return aSVGStrDesc;
+            return OUString(constToken_Desc);
         }
 } // end of namespace svgio
 
