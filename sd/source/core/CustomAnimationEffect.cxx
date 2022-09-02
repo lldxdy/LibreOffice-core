@@ -1584,7 +1584,7 @@ void CustomAnimationEffect::updateSdrPathObjFromPath( SdrPathObj& rPathObj )
             SdrPage* pPage = pObj->getSdrPageFromSdrObject();
             if( pPage )
             {
-                const Size aPageSize( pPage->GetSize() );
+                const Size aPageSize(pPage->GetSizeHmm());
                 aPolyPoly.transform(basegfx::utils::createScaleB2DHomMatrix(static_cast<double>(aPageSize.Width()), static_cast<double>(aPageSize.Height())));
             }
 
@@ -1625,7 +1625,7 @@ void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj
         SdrPage* pPage = pObj->getSdrPageFromSdrObject();
         if( pPage )
         {
-            const Size aPageSize( pPage->GetSize() );
+            const Size aPageSize(pPage->GetSizeHmm());
             aPolyPoly.transform(basegfx::utils::createScaleB2DHomMatrix(
                 1.0 / static_cast<double>(aPageSize.Width()), 1.0 / static_cast<double>(aPageSize.Height())));
         }

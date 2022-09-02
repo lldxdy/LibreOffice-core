@@ -530,7 +530,7 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
 
     const SfxItemSet* pArgs = rReq.GetArgs();
     const Point aPagePos( GetActiveWindow()->GetViewOrigin() );
-    Size aPageSize = mpActualPage->GetSize();
+    Size aPageSize = mpActualPage->GetSizeHmm();
     Size aViewSize = GetActiveWindow()->GetViewSize();
 
     switch ( rReq.GetSlot() )
@@ -889,7 +889,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
     Size aViewSize = GetActiveWindow()->GetViewSize();
 
     const Point aPagePos( GetActiveWindow()->GetViewOrigin() );
-    Size aPageSize = mpActualPage->GetSize();
+    Size aPageSize = mpActualPage->GetSizeHmm();
 
     ::tools::Rectangle aRect(aPagePos, Point( aViewSize.Width() - (aPagePos.X() + aPageSize.Width()),
                                      aViewSize.Height() - (aPagePos.Y() + aPageSize.Height())));

@@ -403,7 +403,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     pPage->TRG_SetMasterPage(pExample->TRG_GetMasterPage());
 
     // set page size
-    pPage->SetSize(pExample->GetSize());
+    pPage->setSize(pExample->getSize());
     pPage->SetBorder( pExample->GetLeftBorder(),
                       pExample->GetUpperBorder(),
                       pExample->GetRightBorder(),
@@ -442,7 +442,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     pNotesPage->TRG_SetMasterPage(pExample->TRG_GetMasterPage());
 
     // set page size, there must be already one page available
-    pNotesPage->SetSize(pExample->GetSize());
+    pNotesPage->setSize(pExample->getSize());
     pNotesPage->SetBorder( pExample->GetLeftBorder(),
                            pExample->GetUpperBorder(),
                            pExample->GetRightBorder(),

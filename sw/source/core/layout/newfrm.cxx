@@ -449,8 +449,8 @@ void SwRootFrame::Init( SwFrameFormat* pFormat )
     {
         // Disable "multiple layout"
         mpDrawPage = pMd->GetPage(0);
-
-        mpDrawPage->SetSize( getFrameArea().SSize() );
+        Size aSize = getFrameArea().SSize();
+        mpDrawPage->setSize(gfx::length::fromSizeHmm(aSize));
     }
 
     // Initialize the layout: create pages, link content with Content etc.

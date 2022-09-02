@@ -234,7 +234,7 @@ const SfxItemSet* FuPage::ExecuteDialog(weld::Window* pParent, const SfxRequest&
     aNewAttr.Put( aPageItem );
 
     // size
-    maSize = mpPage->GetSize();
+    maSize = mpPage->GetSizeHmm();
     SvxSizeItem aSizeItem( SID_ATTR_PAGE_SIZE, maSize );
     aNewAttr.Put( aSizeItem );
 
@@ -526,7 +526,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     {
         aNewSize = static_cast<const SvxSizeItem*>(pPoolItem)->GetSize();
 
-        if( mpPage->GetSize() != aNewSize )
+        if (mpPage->GetSizeHmm() != aNewSize)
             bSetPageSizeAndBorder = true;
     }
 
@@ -635,7 +635,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     }
 
     // Objects can not be bigger than ViewSize
-    Size aPageSize = mpDoc->GetSdPage(0, ePageKind)->GetSize();
+    Size aPageSize = mpDoc->GetSdPage(0, ePageKind)->GetSizeHmm();
     Size aViewSize(aPageSize.Width() * 3, aPageSize.Height() * 2);
     mpDoc->SetMaxObjSize(aViewSize);
 

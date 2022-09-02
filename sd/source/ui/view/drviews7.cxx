@@ -1707,7 +1707,7 @@ void DrawViewShell::GetPageProperties( SfxItemSet &rSet )
     SvxPageItem aPageItem(SID_ATTR_PAGE);
     aPageItem.SetLandscape( pPage->GetOrientation() == Orientation::Landscape );
 
-    rSet.Put(SvxSizeItem( SID_ATTR_PAGE_SIZE, pPage->GetSize() ));
+    rSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, pPage->GetSizeHmm()));
     rSet.Put(aPageItem);
 
     const SfxItemSet &rPageAttr = pPage->getSdrPageProperties().GetItemSet();
@@ -1880,7 +1880,7 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
     {
         PageKind            ePageKind = GetPageKind();
         const SfxPoolItem*  pPoolItem = nullptr;
-        Size                aNewSize(pPage->GetSize());
+        Size aNewSize = pPage->GetSizeHmm();
         sal_Int32           nLeft  = -1, nRight = -1, nUpper = -1, nLower = -1;
         bool                bScaleAll = true;
         Orientation         eOrientation = pPage->GetOrientation();

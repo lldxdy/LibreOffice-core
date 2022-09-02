@@ -321,7 +321,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
             // in comparison. Use a common scaling factor for hor/ver to not get
             // asynchronous border distances, though. All in all this will adapt borders
             // nicely and is based on office-defaults for standard-page-border-sizes.
-            const Size aPageSize(pTargetSdrPage->GetSize());
+            const Size aPageSize = gfx::length::toSizeHmm(pTargetSdrPage->getSize());
             const double fBorderRelation((
                 static_cast< double >(pTargetSdrPage->GetLeftBorder()) / aPageSize.Width() +
                 static_cast< double >(pTargetSdrPage->GetRightBorder()) / aPageSize.Width() +

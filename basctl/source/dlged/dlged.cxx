@@ -215,12 +215,13 @@ DlgEditor::DlgEditor (
     aMarkIdle.SetInvokeHandler( LINK( this, DlgEditor, MarkTimeout ) );
 
     rWindow.SetMapMode( MapMode( MapUnit::Map100thMM ) );
-    pDlgEdPage->SetSize( rWindow.PixelToLogic( Size(DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN) ) );
+    Size aPageSize = rWindow.PixelToLogic(Size(DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN));
+    pDlgEdPage->setSize({ gfx::Length::hmm(aPageSize.Width()), gfx::Length::hmm(aPageSize.Height()) });
 
     pDlgEdView->ShowSdrPage(pDlgEdView->GetModel()->GetPage(0));
     pDlgEdView->SetLayerVisible( "HiddenLayer", false );
     pDlgEdView->SetMoveSnapOnlyTopLeft(true);
-    pDlgEdView->SetWorkArea( tools::Rectangle( Point( 0, 0 ), pDlgEdPage->GetSize() ) );
+    pDlgEdView->SetWorkArea(gfx::length::toRectangleHmm(pDlgEdPage->getRectangle()));
 
     Size aGridSize( 100, 100 );  // 100TH_MM
     pDlgEdView->SetGridCoarse( aGridSize );
@@ -266,7 +267,7 @@ void DlgEditor::InitScrollBars()
         return;
 
     Size aOutSize = rWindow.GetOutDev()->GetOutputSize();
-    Size aPgSize  = pDlgEdPage->GetSize();
+    Size aPgSize = gfx::length::toSizeHmm(pDlgEdPage->getSize());
 
     pHScroll->SetRange( Range( 0, aPgSize.Width()  ));
     pVScroll->SetRange( Range( 0, aPgSize.Height() ));
@@ -1216,11 +1217,11 @@ bool DlgEditor::AdjustPageSize()
 
             if ( pDlgEdPage )
             {
-                Size aPageSize = pDlgEdPage->GetSize();
+                Size aPageSize = gfx::length::toSizeHmm(pDlgEdPage->getSize());
                 if ( nNewPageWidth != aPageSize.Width() || nNewPageHeight != aPageSize.Height() )
                 {
                     Size aNewPageSize( nNewPageWidth, nNewPageHeight );
-                    pDlgEdPage->SetSize( aNewPageSize );
+                    pDlgEdPage->setSize({ gfx::Length::hmm(aNewPageSize.Width()), gfx::Length::hmm(aNewPageSize.Height()) });
                     pDlgEdView->SetWorkArea( tools::Rectangle( Point( 0, 0 ), aNewPageSize ) );
                     bAdjustedPageSize = true;
                 }

@@ -342,23 +342,23 @@ VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, tools::Lo
     VclPtr<VirtualDevice>  pVDev = VclPtr<VirtualDevice>::Create();
     MapMode         aMM( MapUnit::Map100thMM );
 
-    Point aPoint( 0, 0 );
-    Size aPageSize(pPage->GetSize());
+    Point aPoint(0, 0);
+    auto aPageSize = gfx::length::toSizeHmm(pPage->getSize());
 
     // use scaling?
     if( nWidthPixel != 0 )
     {
-        const Fraction aFrac( nWidthPixel, pVDev->LogicToPixel( aPageSize, aMM ).Width() );
+        const Fraction aFrac(nWidthPixel, pVDev->LogicToPixel(aPageSize, aMM).Width());
 
-        aMM.SetScaleX( aFrac );
+        aMM.SetScaleX(aFrac);
 
-        if( nHeightPixel == 0 )
-            aMM.SetScaleY( aFrac );
+        if (nHeightPixel == 0)
+            aMM.SetScaleY(aFrac);
     }
 
-    if( nHeightPixel != 0 )
+    if (nHeightPixel != 0)
     {
-        const Fraction aFrac( nHeightPixel, pVDev->LogicToPixel( aPageSize, aMM ).Height() );
+        const Fraction aFrac(nHeightPixel, pVDev->LogicToPixel(aPageSize, aMM).Height());
 
         if( nWidthPixel == 0 )
             aMM.SetScaleX( aFrac );
@@ -623,9 +623,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
 
             if(pCorrectProperties)
             {
-                pTempBackgroundShape = new SdrRectObj(
-                    *mpDoc,
-                    tools::Rectangle(Point(0,0), pPage->GetSize()));
+                pTempBackgroundShape = new SdrRectObj(*mpDoc, gfx::length::toRectangleHmm(pPage->getRectangle()));
                 pTempBackgroundShape->SetMergedItemSet(pCorrectProperties->GetItemSet());
                 pTempBackgroundShape->SetMergedItem(XLineStyleItem(drawing::LineStyle_NONE));
                 pTempBackgroundShape->NbcSetStyleSheet(pCorrectProperties->GetStyleSheet(), true);
@@ -634,7 +632,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
         }
         else
         {
-            const Size aSize( pPage->GetSize() );
+            const Size aSize = gfx::length::toSizeHmm(pPage->getSize());
 
             // generate a bitmap to convert it to a pixel format.
             // For gif pictures there can also be a vector format used (bTranslucent)

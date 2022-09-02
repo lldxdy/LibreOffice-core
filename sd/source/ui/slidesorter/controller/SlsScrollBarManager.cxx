@@ -340,7 +340,7 @@ bool ScrollBarManager::TestScrollBarVisibilities (
     bool bRearrangeSuccess (mrSlideSorter.GetView().GetLayouter().Rearrange (
         mrSlideSorter.GetView().GetOrientation(),
         aBrowserSize,
-        rModel.GetPageDescriptor(0)->GetPage()->GetSize(),
+        rModel.GetPageDescriptor(0)->GetPage()->GetSizeHmm(),
         rModel.GetPageCount()));
 
     if (bRearrangeSuccess)

@@ -343,7 +343,7 @@ void DrawViewShell::WriteFrameViewData()
     if (comphelper::LibreOfficeKit::isActive())
     {
         // aVisArea is nonsensical in the LOK case, use the slide size
-        aVisArea = ::tools::Rectangle(Point(), getCurrentPage()->GetSize());
+        aVisArea = gfx::length::toRectangleHmm(getCurrentPage()->getRectangle());
     }
 
     mpFrameView->SetVisArea(aVisArea);

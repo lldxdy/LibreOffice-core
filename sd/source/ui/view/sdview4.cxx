@@ -221,7 +221,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         else
         {
             SdrPage* pPage = pPV->GetPage();
-            Size aPageSize( pPage->GetSize() );
+            Size aPageSize(pPage->GetSizeHmm());
             aPageSize.AdjustWidth( -(pPage->GetLeftBorder() + pPage->GetRightBorder()) );
             aPageSize.AdjustHeight( -(pPage->GetUpperBorder() + pPage->GetLowerBorder()) );
             pNewGrafObj->AdjustToMaxRect( ::tools::Rectangle( Point(), aPageSize ), true );

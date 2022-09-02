@@ -92,7 +92,7 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
 
         // constrain size to page size if necessary
         SdrPage* pPage = mpDrawView->GetSdrPageView()->GetPage();
-        Size aPageSize = pPage->GetSize();
+        Size aPageSize = pPage->GetSizeHmm();
         aPageSize.AdjustWidth( -(pPage->GetLeftBorder() + pPage->GetRightBorder()) );
         aPageSize.AdjustHeight( -(pPage->GetUpperBorder() + pPage->GetLowerBorder()) );
 

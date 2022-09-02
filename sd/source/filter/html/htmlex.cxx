@@ -589,8 +589,8 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
 
     // calculate image sizes
     SdPage* pPage = mpDoc->GetSdPage(0, PageKind::Standard);
-    Size aTmpSize( pPage->GetSize() );
-    double dRatio=static_cast<double>(aTmpSize.Width())/aTmpSize.Height();
+    Size aSize = pPage->GetSizeHmm();
+    double dRatio = double(aSize.Width()) / aSize.Height();
 
     mnHeightPixel = static_cast<sal_uInt16>(mnWidthPixel/dRatio);
 
@@ -1671,8 +1671,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                 Point     aLogPos(aRect.TopLeft());
                 bool      bIsSquare = aRect.GetWidth() == aRect.GetHeight();
 
-                sal_uLong nPageWidth = pPage->GetSize().Width() - pPage->GetLeftBorder() -
-                                   pPage->GetRightBorder();
+                sal_Int32 nPageWidth = pPage->GetSizeHmm().Width() - pPage->GetLeftBorder() - pPage->GetRightBorder();
 
                 // BoundRect is relative to the physical page origin, not the
                 // origin of ordinates

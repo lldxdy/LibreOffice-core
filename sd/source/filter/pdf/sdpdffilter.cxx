@@ -81,7 +81,7 @@ bool SdPdfFilter::Import()
             return false;
 
         // Make the page size match the rendered image.
-        pPage->SetSize(aSizeHMM);
+        pPage->setSize(gfx::length::fromSizeHmm(aSizeHMM));
 
         rtl::Reference<SdrGrafObj> pSdrGrafObj = new SdrGrafObj(
             pPage->getSdrModelFromSdrPage(), rGraphic, tools::Rectangle(Point(), aSizeHMM));

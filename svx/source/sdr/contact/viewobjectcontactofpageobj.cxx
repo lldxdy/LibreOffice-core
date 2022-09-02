@@ -161,7 +161,7 @@ void PagePrimitiveExtractor::InvalidatePartOfView(const basegfx::B2DRange& rRang
 
     if(pStartPage && !rRange.isEmpty())
     {
-        const basegfx::B2DRange aPageRange(0.0, 0.0, static_cast<double>(pStartPage->GetWidth()), static_cast<double>(pStartPage->GetHeight()));
+        const basegfx::B2DRange aPageRange = gfx::length::toB2DRange2DHmm(pStartPage->getRectangle());
 
         if(rRange.overlaps(aPageRange))
         {
@@ -207,9 +207,8 @@ void ViewObjectContactOfPageObj::createPrimitive2DSequence(const DisplayInfo& /*
     {
         // get displayed page's geometry
         drawinglayer::primitive2d::Primitive2DContainer xPageContent;
-        const Size aPageSize(pPage->GetSize());
-        const double fPageWidth(aPageSize.getWidth());
-        const double fPageHeight(aPageSize.getHeight());
+        const double fPageWidth(pPage->getSize().getWidth().as_hmm());
+        const double fPageHeight(pPage->getSize().getHeight().as_hmm());
 
         // The case that a PageObject contains another PageObject which visualizes the
         // same page again would lead to a recursion. Limit that recursion depth to one

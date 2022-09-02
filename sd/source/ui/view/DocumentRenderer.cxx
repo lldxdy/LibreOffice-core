@@ -318,7 +318,7 @@ namespace {
             pView->DrawMarkedObj(rPrinter);
         else
             rPrintView.CompleteRedraw(&rPrinter,
-                    vcl::Region(::tools::Rectangle(Point(0,0), rPage.GetSize())));
+                    vcl::Region(gfx::length::toRectangleHmm(rPage.getRectangle())));
 
         rPrinter.SetMapMode(aOriginalMapMode);
 
@@ -816,7 +816,7 @@ namespace {
                 return;
             MapMode aMap (rPrinter.GetMapMode());
 
-            const Size aPageSize (pPageToPrint->GetSize());
+            const Size aPageSize (pPageToPrint->GetSizeHmm());
             const Size aPrintSize (rPrinter.GetOutputSize());
 
             const sal_Int32 nPageWidth (aPageSize.Width() + mnGap
@@ -1428,7 +1428,7 @@ private:
         // Draw and Notes should usually use specified paper size when printing
         if (!mpOptions->IsPrinterPreferred(mrBase.GetDocShell()->GetDocumentType()))
         {
-            aInfo.maPrintSize = mrBase.GetDocument()->GetSdPage(0, PageKind::Standard)->GetSize();
+            aInfo.maPrintSize = mrBase.GetDocument()->GetSdPage(0, PageKind::Standard)->GetSizeHmm();
             maPrintSize = awt::Size(aInfo.maPrintSize.Width(),
                                     aInfo.maPrintSize.Height());
         }
@@ -1776,7 +1776,7 @@ private:
 
         if ( bScalePage )
         {
-            const Size aPageSize (rHandoutPage.GetSize());
+            const Size aPageSize (rHandoutPage.GetSizeHmm());
             const Size aPrintSize (rInfo.mpPrinter->GetOutputSize());
 
             const double fHorz = static_cast<double>(aPrintSize.Width())    / aPageSize.Width();
@@ -1863,7 +1863,7 @@ private:
         if (pDocument->GetSdPageCount(ePageKind) == 0)
             return;
         SdPage* pRefPage = pDocument->GetSdPage(0, ePageKind);
-        rInfo.maPageSize = pRefPage->GetSize();
+        rInfo.maPageSize = pRefPage->GetSizeHmm();
 
         SetupPaperOrientation(ePageKind, rInfo);
 
@@ -1902,7 +1902,7 @@ private:
 
             MapMode aMap (rInfo.maMap);
             // is it possible that the page size changed?
-            const Size aPageSize = pPage->GetSize();
+            const Size aPageSize = pPage->GetSizeHmm();
 
             if (mpOptions->IsPageSize())
             {

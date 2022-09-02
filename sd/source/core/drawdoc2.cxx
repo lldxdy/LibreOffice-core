@@ -511,12 +511,12 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
 
     if( pRefPage )
     {
-        pHandoutPage->SetSize(pRefPage->GetSize());
+        pHandoutPage->setSize(pRefPage->getSize());
         pHandoutPage->SetBorder( pRefPage->GetLeftBorder(), pRefPage->GetUpperBorder(), pRefPage->GetRightBorder(), pRefPage->GetLowerBorder() );
     }
     else
     {
-        pHandoutPage->SetSize(aDefSize);
+        pHandoutPage->setSize(gfx::length::fromSizeHmm(aDefSize));
         pHandoutPage->SetBorder(0, 0, 0, 0);
     }
 
@@ -526,7 +526,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
 
     // Insert master page and register this with the handout page
     rtl::Reference<SdPage> pHandoutMPage = AllocSdPage(true);
-    pHandoutMPage->SetSize( pHandoutPage->GetSize() );
+    pHandoutMPage->setSize(pHandoutPage->getSize());
     pHandoutMPage->SetPageKind(PageKind::Handout);
     pHandoutMPage->SetBorder( pHandoutPage->GetLeftBorder(),
                               pHandoutPage->GetUpperBorder(),
@@ -550,13 +550,13 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
 
         if( pRefPage )
         {
-            pPage->SetSize( pRefPage->GetSize() );
+            pPage->setSize(pRefPage->getSize());
             pPage->SetBorder( pRefPage->GetLeftBorder(), pRefPage->GetUpperBorder(), pRefPage->GetRightBorder(), pRefPage->GetLowerBorder() );
         }
         else if (meDocType == DocumentType::Draw)
         {
             // Draw: always use default size with margins
-            pPage->SetSize(aDefSize);
+            pPage->setSize(gfx::length::fromSizeHmm(aDefSize));
 
             SfxPrinter* pPrinter = mpDocSh->GetPrinter(false);
             if (pPrinter && pPrinter->IsValid())
@@ -587,7 +587,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
         {
             // Impress: always use screen format, landscape.
             Size aSz( SvxPaperInfo::GetPaperSize(PAPER_SCREEN_16_9, MapUnit::Map100thMM) );
-            pPage->SetSize( Size( aSz.Height(), aSz.Width() ) );
+            pPage->setSize({ gfx::Length::hmm(aSz.Height()), gfx::Length::hmm(aSz.Width()) });
             pPage->SetBorder(0, 0, 0, 0);
         }
 
@@ -601,7 +601,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
 
     // Insert master page, then register this with the page
     rtl::Reference<SdPage> pMPage = AllocSdPage(true);
-    pMPage->SetSize( pPage->GetSize() );
+    pMPage->setSize(pPage->getSize());
     pMPage->SetBorder( pPage->GetLeftBorder(),
                        pPage->GetUpperBorder(),
                        pPage->GetRightBorder(),
@@ -619,7 +619,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
 
     if( pRefPage )
     {
-        pNotesPage->SetSize( pRefPage->GetSize() );
+        pNotesPage->setSize(pRefPage->getSize());
         pNotesPage->SetBorder( pRefPage->GetLeftBorder(), pRefPage->GetUpperBorder(), pRefPage->GetRightBorder(), pRefPage->GetLowerBorder() );
     }
     else
@@ -627,11 +627,11 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
         // Always use portrait format
         if (aDefSize.Height() >= aDefSize.Width())
         {
-            pNotesPage->SetSize(aDefSize);
+            pNotesPage->setSize(gfx::length::fromSizeHmm(aDefSize));
         }
         else
         {
-            pNotesPage->SetSize( Size(aDefSize.Height(), aDefSize.Width()) );
+            pNotesPage->setSize({ gfx::Length::hmm(aDefSize.Height()), gfx::Length::hmm(aDefSize.Width()) });
         }
 
         pNotesPage->SetBorder(0, 0, 0, 0);
@@ -643,7 +643,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument const * pRefDocument /* = 
 
     // Insert master page, then register this with the notes page
     rtl::Reference<SdPage> pNotesMPage = AllocSdPage(true);
-    pNotesMPage->SetSize( pNotesPage->GetSize() );
+    pNotesMPage->setSize(pNotesPage->getSize());
     pNotesMPage->SetPageKind(PageKind::Notes);
     pNotesMPage->SetBorder( pNotesPage->GetLeftBorder(),
                             pNotesPage->GetUpperBorder(),
@@ -1093,7 +1093,7 @@ void SdDrawDocument::CheckMasterPages()
                 pNewNotesPage->SetPageKind(PageKind::Notes);
                 if( pRefNotesPage )
                 {
-                    pNewNotesPage->SetSize( pRefNotesPage->GetSize() );
+                    pNewNotesPage->setSize(pRefNotesPage->getSize());
                     pNewNotesPage->SetBorder( pRefNotesPage->GetLeftBorder(),
                                             pRefNotesPage->GetUpperBorder(),
                                             pRefNotesPage->GetRightBorder(),
@@ -1163,7 +1163,7 @@ sal_uInt16 SdDrawDocument::CreatePage (
 
     // Set the size here since else the presobj autolayout
     // will be wrong.
-    pStandardPage->SetSize( pPreviousStandardPage->GetSize() );
+    pStandardPage->setSize(pPreviousStandardPage->getSize());
     pStandardPage->SetBorder( pPreviousStandardPage->GetLeftBorder(),
                               pPreviousStandardPage->GetUpperBorder(),
                               pPreviousStandardPage->GetRightBorder(),
@@ -1352,7 +1352,7 @@ void SdDrawDocument::SetupNewPage (
 {
     if (pPreviousPage != nullptr)
     {
-        pPage->SetSize( pPreviousPage->GetSize() );
+        pPage->setSize(pPreviousPage->getSize());
         pPage->SetBorder( pPreviousPage->GetLeftBorder(),
             pPreviousPage->GetUpperBorder(),
             pPreviousPage->GetRightBorder(),

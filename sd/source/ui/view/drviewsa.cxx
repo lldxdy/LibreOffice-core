@@ -240,7 +240,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
             break;
     }
 
-    Size aPageSize( GetDoc()->GetSdPage(0, mePageKind)->GetSize() );
+    Size aPageSize(GetDoc()->GetSdPage(0, mePageKind)->GetSizeHmm());
     Point aPageOrg( aPageSize.Width(), aPageSize.Height() / 2);
     Size aSize(aPageSize.Width() * 3, aPageSize.Height() * 2);
     InitWindows(aPageOrg, aSize, Point(-1, -1));
@@ -436,7 +436,7 @@ void DrawViewShell::SetupPage (Size const &rSize,
             {
                 ::tools::Rectangle aBorderRect(nLeft, nUpper, nRight, nLower);
                 pPage->ScaleObjects(rSize, aBorderRect, bScaleAll);
-                pPage->SetSize(rSize);
+                pPage->setSize({ gfx::Length::hmm(rSize.Width()), gfx::Length::hmm(rSize.Height()) });
 
             }
             if( bMargin )
@@ -469,7 +469,7 @@ void DrawViewShell::SetupPage (Size const &rSize,
             {
                 ::tools::Rectangle aBorderRect(nLeft, nUpper, nRight, nLower);
                 pPage->ScaleObjects(rSize, aBorderRect, bScaleAll);
-                pPage->SetSize(rSize);
+                pPage->setSize({ gfx::Length::hmm(rSize.Width()), gfx::Length::hmm(rSize.Height()) });
             }
             if( bMargin )
             {
@@ -495,8 +495,8 @@ void DrawViewShell::SetupPage (Size const &rSize,
         pHandoutPage->CreateTitleAndLayout(true);
     }
 
-    ::tools::Long nWidth = mpActualPage->GetSize().Width();
-    ::tools::Long nHeight = mpActualPage->GetSize().Height();
+    ::tools::Long nWidth = mpActualPage->GetSizeHmm().Width();
+    ::tools::Long nHeight = mpActualPage->GetSizeHmm().Height();
 
     Point aPageOrg(nWidth, nHeight / 2);
     Size aSize( nWidth * 3, nHeight * 2);
@@ -575,7 +575,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             if( pPageView )
             {
                 Point aPagePos(0, 0);
-                Size aPageSize = pPageView->GetPage()->GetSize();
+                Size aPageSize = pPageView->GetPage()->GetSizeHmm();
 
                 aPagePos.AdjustX(aPageSize.Width()  / 2 );
                 aPageSize.setWidth( static_cast<::tools::Long>(aPageSize.Width() * 1.03) );

@@ -1957,9 +1957,7 @@ void SdrEditView::AlignMarkedObjects(SdrHorAlign eHor, SdrVertAlign eVert)
             }
             else
             {
-                aBound=tools::Rectangle(pPage->GetLeftBorder(),pPage->GetUpperBorder(),
-                                 pPage->GetWidth()-pPage->GetRightBorder(),
-                                 pPage->GetHeight()-pPage->GetLowerBorder());
+                aBound = gfx::length::toRectangleHmm(pPage->getInnerRectangle());
             }
         }
         else

@@ -211,7 +211,8 @@ void ViewObjectContactOfPageFill::createPrimitive2DSequence(const DisplayInfo& /
     {
         const SdrPage& rPage = getPage();
 
-        const basegfx::B2DRange aPageFillRange(0.0, 0.0, static_cast<double>(rPage.GetWidth()), static_cast<double>(rPage.GetHeight()));
+        const basegfx::B2DRange aPageFillRange = gfx::length::toB2DRange2DHmm(rPage.getRectangle());
+
         const basegfx::B2DPolygon aPageFillPolygon(basegfx::utils::createPolygonFromRect(aPageFillRange));
         Color aPageFillColor;
 
@@ -423,12 +424,16 @@ void ViewObjectContactOfPageGrid::createPrimitive2DSequence(const DisplayInfo& /
     {
         const SdrView& rView = pPageView->GetView();
         const SdrPage& rPage = getPage();
+
+        const double fPageWidth(rPage.getSize().getWidth().as_hmm());
+        const double fPageHeight(rPage.getSize().getHeight().as_hmm());
+
         const Color aGridColor(rView.GetGridColor());
         const basegfx::BColor aRGBGridColor(aGridColor.getBColor());
 
         basegfx::B2DHomMatrix aGridMatrix;
-        aGridMatrix.set(0, 0, static_cast<double>(rPage.GetWidth() - (rPage.GetRightBorder() + rPage.GetLeftBorder())));
-        aGridMatrix.set(1, 1, static_cast<double>(rPage.GetHeight() - (rPage.GetLowerBorder() + rPage.GetUpperBorder())));
+        aGridMatrix.set(0, 0, static_cast<double>(fPageWidth - (rPage.GetRightBorder() + rPage.GetLeftBorder())));
+        aGridMatrix.set(1, 1, static_cast<double>(fPageHeight - (rPage.GetLowerBorder() + rPage.GetUpperBorder())));
         aGridMatrix.set(0, 2, static_cast<double>(rPage.GetLeftBorder()));
         aGridMatrix.set(1, 2, static_cast<double>(rPage.GetUpperBorder()));
 

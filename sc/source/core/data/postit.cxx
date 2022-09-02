@@ -395,7 +395,7 @@ void ScCaptionCreator::Initialize()
     mbNegPage = mrDoc.IsNegativePage( maPos.Tab() );
     if( SdrPage* pDrawPage = GetDrawPage() )
     {
-        maPageRect = tools::Rectangle( Point( 0, 0 ), pDrawPage->GetSize() );
+        maPageRect = gfx::length::toRectangleHmm(pDrawPage->getRectangle());
         /*  #i98141# SdrPage::GetSize() returns negative width in RTL mode.
             The call to Rectangle::Adjust() orders left/right coordinate
             accordingly. */

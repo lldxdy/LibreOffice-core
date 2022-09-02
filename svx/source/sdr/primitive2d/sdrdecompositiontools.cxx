@@ -141,8 +141,8 @@ drawinglayer::attribute::SdrFillAttribute getMasterPageFillAttribute(
     if(nullptr != pVisualizedPage)
     {
         // copy needed values for further processing
-        rPageSize.setX(pVisualizedPage->GetWidth());
-        rPageSize.setY(pVisualizedPage->GetHeight());
+        rPageSize.setX(pVisualizedPage->getSize().getWidth().as_hmm());
+        rPageSize.setY(pVisualizedPage->getSize().getHeight().as_hmm());
 
         if(pVisualizedPage->IsMasterPage())
         {

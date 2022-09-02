@@ -443,7 +443,7 @@ void SdDrawDocument::AdaptPageSizeForAllPages(
                 new SdPageFormatUndoAction(
                     this,
                     pPage,
-                    pPage->GetSize(),
+                    pPage->GetSizeHmm(),
                     pPage->GetLeftBorder(), pPage->GetRightBorder(),
                     pPage->GetUpperBorder(), pPage->GetLowerBorder(),
                     pPage->GetOrientation(),
@@ -466,7 +466,7 @@ void SdDrawDocument::AdaptPageSizeForAllPages(
 
             if (rNewSize.Width() > 0)
             {
-                pPage->SetSize(rNewSize);
+                pPage->setSize(gfx::length::fromSizeHmm(rNewSize));
             }
         }
 
@@ -498,7 +498,7 @@ void SdDrawDocument::AdaptPageSizeForAllPages(
                 new SdPageFormatUndoAction(
                     this,
                     pPage,
-                    pPage->GetSize(),
+                    pPage->GetSizeHmm(),
                     pPage->GetLeftBorder(), pPage->GetRightBorder(),
                     pPage->GetUpperBorder(), pPage->GetLowerBorder(),
                     pPage->GetOrientation(),
@@ -521,7 +521,7 @@ void SdDrawDocument::AdaptPageSizeForAllPages(
 
             if (rNewSize.Width() > 0)
             {
-                pPage->SetSize(rNewSize);
+                pPage->setSize(gfx::length::fromSizeHmm(rNewSize));
             }
         }
 

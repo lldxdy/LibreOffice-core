@@ -109,6 +109,39 @@ public:
         gfx::Tuple2DL aTuple(0.5_pt, 1_pt);
         CPPUNIT_ASSERT_EQUAL(6350_emu, aTuple.getX());
         CPPUNIT_ASSERT_EQUAL(12700_emu, aTuple.getY());
+
+        gfx::Tuple2DL aTuple2(0_pt, 0_pt);
+        aTuple2.setX(0.5_pt);
+        aTuple2.setY(1_pt);
+
+        CPPUNIT_ASSERT_EQUAL(6350_emu, aTuple2.getX());
+        CPPUNIT_ASSERT_EQUAL(12700_emu, aTuple2.getY());
+
+        CPPUNIT_ASSERT_EQUAL(true, aTuple == aTuple2);
+        CPPUNIT_ASSERT_EQUAL(true, aTuple != gfx::Tuple2DL(0_emu, 0_emu));
+
+        CPPUNIT_ASSERT_EQUAL(true, aTuple == aTuple - gfx::Tuple2DL(0_emu, 0_emu));
+        CPPUNIT_ASSERT_EQUAL(true, aTuple == aTuple + gfx::Tuple2DL(0_emu, 0_emu));
+    }
+
+    void testInSize()
+    {
+        gfx::Size2DL aSize(0.5_pt, 1_pt);
+        CPPUNIT_ASSERT_EQUAL(6350_emu, aSize.getWidth());
+        CPPUNIT_ASSERT_EQUAL(12700_emu, aSize.getHeight());
+
+        gfx::Size2DL aSize2(0_pt, 0_pt);
+        aSize2.setWidth(0.5_pt);
+        aSize2.setHeight(1_pt);
+
+        CPPUNIT_ASSERT_EQUAL(6350_emu, aSize2.getWidth());
+        CPPUNIT_ASSERT_EQUAL(12700_emu, aSize2.getHeight());
+
+        CPPUNIT_ASSERT_EQUAL(true, aSize == aSize2);
+        CPPUNIT_ASSERT_EQUAL(true, aSize != gfx::Size2DL(0_emu, 0_emu));
+
+        CPPUNIT_ASSERT_EQUAL(true, aSize == aSize - gfx::Size2DL(0_emu, 0_emu));
+        CPPUNIT_ASSERT_EQUAL(true, aSize == aSize + gfx::Size2DL(0_emu, 0_emu));
     }
 
     void testConversionToRectanle()

@@ -641,7 +641,7 @@ void PresLayoutPreview::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 void PresLayoutPreview::init( SdPage *pMaster )
 {
     mpMaster = pMaster;
-    maPageSize = pMaster->GetSize();
+    maPageSize = pMaster->GetSizeHmm();
 }
 
 void PresLayoutPreview::update( HeaderFooterSettings const & rSettings )

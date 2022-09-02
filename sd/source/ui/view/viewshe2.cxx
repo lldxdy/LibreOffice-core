@@ -500,8 +500,8 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     SdPage* pPage(0 != nPageCnt
         ? GetDoc()->GetSdPage(0, ePageKind)
         : GetDoc()->GetMasterSdPage(0, ePageKind));
-    const ::tools::Long nWidth(pPage->GetSize().Width());
-    const ::tools::Long nHeight(pPage->GetSize().Height());
+    const ::tools::Long nWidth(pPage->GetSizeHmm().Width());
+    const ::tools::Long nHeight(pPage->GetSizeHmm().Height());
     const Point aPageOrg(nWidth, nHeight / 2);
     const Size aViewSize(nWidth * 3, nHeight * 2);
     Point aVisAreaPos;

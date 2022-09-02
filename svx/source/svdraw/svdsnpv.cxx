@@ -304,8 +304,8 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
     }
     if (mbBordVisible && bBordSnap) {
         SdrPage* pPage=pPV->GetPage();
-        tools::Long xs=pPage->GetWidth();
-        tools::Long ys=pPage->GetHeight();
+        tools::Long xs = pPage->getSize().getWidth().as_hmm();
+        tools::Long ys = pPage->getSize().getHeight().as_hmm();
         tools::Long lft=pPage->GetLeftBorder();
         tools::Long rgt=pPage->GetRightBorder();
         tools::Long upp=pPage->GetUpperBorder();

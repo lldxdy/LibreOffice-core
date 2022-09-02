@@ -119,7 +119,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
 
                     // page with title & structuring!
                     pSummaryPage = mpDoc->AllocSdPage(false);
-                    pSummaryPage->SetSize(pActualPage->GetSize() );
+                    pSummaryPage->setSize(pActualPage->getSize());
                     pSummaryPage->SetBorder(pActualPage->GetLeftBorder(),
                                      pActualPage->GetUpperBorder(),
                                      pActualPage->GetRightBorder(),
@@ -139,7 +139,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
 
                     // notes-page
                     rtl::Reference<SdPage> pNotesPage = mpDoc->AllocSdPage(false);
-                    pNotesPage->SetSize(pActualNotesPage->GetSize());
+                    pNotesPage->setSize(pActualNotesPage->getSize());
                     pNotesPage->SetBorder(pActualNotesPage->GetLeftBorder(),
                                           pActualNotesPage->GetUpperBorder(),
                                           pActualNotesPage->GetRightBorder(),

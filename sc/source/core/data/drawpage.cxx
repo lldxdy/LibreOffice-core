@@ -24,8 +24,8 @@
 ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, bool bMasterPage)
 :   FmFormPage(rNewModel, bMasterPage)
 {
-    SetSize( Size( SAL_MAX_INT32, SAL_MAX_INT32 ) );
-        // largest size supported by sal_Int32 SdrPage::mnWidth/Height
+    setSize({ gfx::Length::hmm(SAL_MAX_INT32), gfx::Length::hmm(SAL_MAX_INT32) });
+    // largest size supported by sal_Int32 SdrPage::mnWidth/Height
 }
 
 ScDrawPage::~ScDrawPage()

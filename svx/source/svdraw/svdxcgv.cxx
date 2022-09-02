@@ -138,10 +138,11 @@ bool SdrExchangeView::Paste(const OUString& rStr, const Point& rPos, SdrObjList*
     if (!ImpGetPasteLayer(pLst,nLayer)) return false;
     bool bUnmark = (nOptions & (SdrInsertFlags::DONTMARK|SdrInsertFlags::ADDMARK))==SdrInsertFlags::NONE && !IsTextEdit();
     if (bUnmark) UnmarkAllObj();
-    tools::Rectangle aTextRect(0,0,500,500);
-    SdrPage* pPage=pLst->getSdrPageFromSdrObjList();
-    if (pPage!=nullptr) {
-        aTextRect.SetSize(pPage->GetSize());
+    tools::Rectangle aTextRect(0, 0, 500, 500);
+    SdrPage* pPage = pLst->getSdrPageFromSdrObjList();
+    if (pPage != nullptr)
+    {
+        aTextRect.SetSize(gfx::length::toSizeHmm(pPage->getSize()));
     }
     rtl::Reference<SdrRectObj> pObj = new SdrRectObj(
         getSdrModelFromSdrView(),
@@ -180,8 +181,9 @@ bool SdrExchangeView::Paste(SvStream& rInput, EETextFormat eFormat, const Point&
     if (bUnmark) UnmarkAllObj();
     tools::Rectangle aTextRect(0,0,500,500);
     SdrPage* pPage=pLst->getSdrPageFromSdrObjList();
-    if (pPage!=nullptr) {
-        aTextRect.SetSize(pPage->GetSize());
+    if (pPage != nullptr)
+    {
+        aTextRect.SetSize(gfx::length::toSizeHmm(pPage->getSize()));
     }
     rtl::Reference<SdrRectObj> pObj = new SdrRectObj(
         getSdrModelFromSdrView(),

@@ -1013,10 +1013,10 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
         aAny <<= GetPage()->GetLowerBorder();
         break;
     case WID_PAGE_WIDTH:
-        aAny <<= static_cast<sal_Int32>( GetPage()->GetSize().getWidth() );
+        aAny <<= static_cast<sal_Int32>( GetPage()->GetSizeHmm().getWidth() );
         break;
     case WID_PAGE_HEIGHT:
-        aAny <<= static_cast<sal_Int32>( GetPage()->GetSize().getHeight() );
+        aAny <<= static_cast<sal_Int32>( GetPage()->GetSizeHmm().getHeight() );
         break;
     case WID_PAGE_ORIENT:
         aAny <<=
@@ -1094,7 +1094,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
                 std::shared_ptr<GDIMetaFile> xMetaFile = pDocShell->GetPreviewMetaFile();
                 if (xMetaFile)
                 {
-                    Size    aSize( GetPage()->GetSize() );
+                    Size aSize = GetPage()->GetSizeHmm();
                     xMetaFile->AddAction( new MetaFillColorAction( COL_WHITE, true ), 0 );
                     xMetaFile->AddAction( new MetaRectAction( ::tools::Rectangle( Point(), aSize ) ), 1 );
                     xMetaFile->SetPrefMapMode(MapMode(MapUnit::Map100thMM));
@@ -1780,7 +1780,7 @@ static void refreshpage( SdDrawDocument* pDoc, const PageKind ePageKind )
     if( auto pDrawViewShell = dynamic_cast<::sd::DrawViewShell* >(pViewSh) )
         pDrawViewShell->ResetActualPage();
 
-    Size aPageSize = pDoc->GetSdPage(0, ePageKind)->GetSize();
+    Size aPageSize = pDoc->GetSdPage(0, ePageKind)->GetSizeHmm();
     const tools::Long nWidth = aPageSize.Width();
     const tools::Long nHeight = aPageSize.Height();
 
@@ -1796,11 +1796,12 @@ static void refreshpage( SdDrawDocument* pDoc, const PageKind ePageKind )
 
 void SdGenericDrawPage::SetWidth( sal_Int32 nWidth )
 {
-    Size aSize( GetPage()->GetSize() );
-    if( aSize.getWidth() == nWidth )
+    auto aSize = GetPage()->getSize();
+
+    if (aSize.getWidth().as_hmm() == nWidth)
         return;
 
-    aSize.setWidth( nWidth );
+    aSize.setHeight(gfx::Length::hmm(nWidth));
 
     SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(GetPage()->getSdrModelFromSdrPage()));
     const PageKind ePageKind = GetPage()->GetPageKind();
@@ -1809,7 +1810,7 @@ void SdGenericDrawPage::SetWidth( sal_Int32 nWidth )
     for (i = 0; i < nPageCnt; i++)
     {
         SdPage* pPage = rDoc.GetMasterSdPage(i, ePageKind);
-        pPage->SetSize(aSize);
+        pPage->setSize(aSize);
     }
 
     nPageCnt = rDoc.GetSdPageCount(ePageKind);
@@ -1817,7 +1818,7 @@ void SdGenericDrawPage::SetWidth( sal_Int32 nWidth )
     for (i = 0; i < nPageCnt; i++)
     {
         SdPage* pPage = rDoc.GetSdPage(i, ePageKind);
-        pPage->SetSize(aSize);
+        pPage->setSize(aSize);
     }
 
     refreshpage( &rDoc, ePageKind );
@@ -1825,11 +1826,12 @@ void SdGenericDrawPage::SetWidth( sal_Int32 nWidth )
 
 void SdGenericDrawPage::SetHeight( sal_Int32 nHeight )
 {
-    Size aSize( GetPage()->GetSize() );
-    if( aSize.getHeight() == nHeight )
+    auto aSize = GetPage()->getSize();
+
+    if (aSize.getHeight().as_hmm() == nHeight)
         return;
 
-    aSize.setHeight( nHeight );
+    aSize.setHeight(gfx::Length::hmm(nHeight));
 
     SdDrawDocument& rDoc(static_cast< SdDrawDocument& >(GetPage()->getSdrModelFromSdrPage()));
     const PageKind ePageKind = GetPage()->GetPageKind();
@@ -1838,7 +1840,7 @@ void SdGenericDrawPage::SetHeight( sal_Int32 nHeight )
     for (i = 0; i < nPageCnt; i++)
     {
         SdPage* pPage = rDoc.GetMasterSdPage(i, ePageKind);
-        pPage->SetSize(aSize);
+        pPage->setSize(aSize);
     }
 
     nPageCnt = rDoc.GetSdPageCount(ePageKind);
@@ -1846,7 +1848,7 @@ void SdGenericDrawPage::SetHeight( sal_Int32 nHeight )
     for (i = 0; i < nPageCnt; i++)
     {
         SdPage* pPage = rDoc.GetSdPage(i, ePageKind);
-        pPage->SetSize(aSize);
+        pPage->setSize(aSize);
     }
 
     refreshpage( &rDoc, ePageKind );
@@ -2354,7 +2356,7 @@ void SAL_CALL SdDrawPage::setMasterPage( const Reference< drawing::XDrawPage >& 
     SvxFmDrawPage::mpPage->SetBorder(pSdPage->GetLeftBorder(),pSdPage->GetUpperBorder(),
                       pSdPage->GetRightBorder(),pSdPage->GetLowerBorder() );
 
-    SvxFmDrawPage::mpPage->SetSize( pSdPage->GetSize() );
+    SvxFmDrawPage::mpPage->setSize(pSdPage->getSize());
     SvxFmDrawPage::mpPage->SetOrientation( pSdPage->GetOrientation() );
     static_cast<SdPage*>(SvxFmDrawPage::mpPage)->SetLayoutName( pSdPage->GetLayoutName() );
 

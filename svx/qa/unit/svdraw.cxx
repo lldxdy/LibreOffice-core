@@ -263,7 +263,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
     pModel->GetItemPool().FreezeIdRanges();
 
     rtl::Reference<SdrPage> pPage(new SdrPage(*pModel, false));
-    pPage->SetSize(Size(1000, 1000));
+    pPage->setSize({ 1_cm, 1_cm });
     pModel->InsertPage(pPage.get(), 0);
 
     tools::Rectangle aSize(Point(), Size(100, 100));

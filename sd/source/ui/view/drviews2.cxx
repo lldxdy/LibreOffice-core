@@ -532,7 +532,7 @@ public:
             pMasterPage->InsertObject(pObject.get());
 
             // Calculate position
-            ::tools::Rectangle aRectangle(Point(), pMasterPage->GetSize());
+            ::tools::Rectangle aRectangle = gfx::length::toRectangleHmm(pMasterPage->getRectangle());
             Point aPosition(aRectangle.Center().X(), aRectangle.Bottom());
 
             aPosition.AdjustX( -(aTextSize.Width() / 2) );

@@ -487,8 +487,8 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
         // this is only used for clipboard where we only have one page
         pStandardPage = mpDoc->AllocSdPage(false);
 
-        Size aDefSize(21000, 29700);   // A4 portrait orientation
-        pStandardPage->SetSize( aDefSize );
+        gfx::Size2DL aDefSize(210_mm, 297_mm);   // A4 portrait orientation
+        pStandardPage->setSize(aDefSize);
         mpDoc->InsertPage(pStandardPage.get(), 0);
     }
     else
@@ -518,7 +518,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
         else
             pStandardPage = mpDoc->AllocSdPage(false);
 
-        pStandardPage->SetSize( pPreviousStandardPage->GetSize() );
+        pStandardPage->setSize(pPreviousStandardPage->getSize());
         pStandardPage->SetBorder( pPreviousStandardPage->GetLeftBorder(),
                                     pPreviousStandardPage->GetUpperBorder(),
                                     pPreviousStandardPage->GetRightBorder(),
@@ -553,7 +553,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
         else
             pNotesPage = mpDoc->AllocSdPage(false);
 
-        pNotesPage->SetSize( pPreviousNotesPage->GetSize() );
+        pNotesPage->setSize(pPreviousNotesPage->getSize());
         pNotesPage->SetBorder( pPreviousNotesPage->GetLeftBorder(),
                                 pPreviousNotesPage->GetUpperBorder(),
                                 pPreviousNotesPage->GetRightBorder(),
@@ -1515,7 +1515,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SdXImpressDocument::getRenderer( 
         awt::Size aPageSize;
         if ( bExportNotesPages )
         {
-            Size aNotesPageSize = mpDoc->GetSdPage( 0, PageKind::Notes )->GetSize();
+            Size aNotesPageSize = mpDoc->GetSdPage(0, PageKind::Notes )->GetSizeHmm();
             aPageSize = awt::Size( aNotesPageSize.Width(), aNotesPageSize.Height() );
         }
         else
@@ -1635,7 +1635,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
         uno::Reference< beans::XPropertySet > xShapePropSet( xShape, uno::UNO_QUERY );
         if( xShapePropSet.is() )
         {
-            Size        aPageSize( rDoc.GetSdPage( 0, PageKind::Standard )->GetSize() );
+            Size aPageSize(rDoc.GetSdPage(0, PageKind::Standard)->GetSizeHmm());
             Point aPoint( 0, 0 );
             ::tools::Rectangle   aPageRect( aPoint, aPageSize );
 
@@ -1922,7 +1922,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
         return;
 
     ::sd::ClientView aView( mpDocShell, pOut );
-    ::tools::Rectangle aVisArea( Point(), mpDoc->GetSdPage( static_cast<sal_uInt16>(nPageNumber) - 1, ePageKind )->GetSize() );
+    ::tools::Rectangle aVisArea( Point(), mpDoc->GetSdPage( static_cast<sal_uInt16>(nPageNumber) - 1, ePageKind )->GetSizeHmm() );
     vcl::Region                       aRegion( aVisArea );
 
     ::sd::ViewShell* pOldViewSh = mpDocShell->GetViewShell();
@@ -2129,7 +2129,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                     }
                 }
 
-                Size        aPageSize( mpDoc->GetSdPage( 0, PageKind::Standard )->GetSize() );
+                Size aPageSize(mpDoc->GetSdPage( 0, PageKind::Standard )->GetSizeHmm());
                 Point aPoint( 0, 0 );
                 ::tools::Rectangle   aPageRect( aPoint, aPageSize );
 
@@ -2536,7 +2536,7 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
         {
             // get the full page size in pixels
             pWindow->EnableMapMode();
-            Size aSize(pWindow->LogicToPixel(pDrawView->GetSdrPageView()->GetPage()->GetSize()));
+            Size aSize(pWindow->LogicToPixel(pDrawView->GetSdrPageView()->GetPage()->GetSizeHmm()));
             // Disable map mode, so that it's possible to send mouse event
             // coordinates in logic units
             pWindow->EnableMapMode(false);
@@ -3231,7 +3231,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
 
         // create and insert new draw masterpage
         rtl::Reference<SdPage> pMPage = mpModel->mpDoc->AllocSdPage(true);
-        pMPage->SetSize( pPage->GetSize() );
+        pMPage->setSize(pPage->getSize());
         pMPage->SetBorder( pPage->GetLeftBorder(),
                            pPage->GetUpperBorder(),
                            pPage->GetRightBorder(),
@@ -3248,7 +3248,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
 
         // create and insert new notes masterpage
         rtl::Reference<SdPage> pMNotesPage = mpModel->mpDoc->AllocSdPage(true);
-        pMNotesPage->SetSize( pRefNotesPage->GetSize() );
+        pMNotesPage->setSize(pRefNotesPage->getSize());
         pMNotesPage->SetPageKind(PageKind::Notes);
         pMNotesPage->SetBorder( pRefNotesPage->GetLeftBorder(),
                                 pRefNotesPage->GetUpperBorder(),

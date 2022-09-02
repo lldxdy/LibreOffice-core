@@ -32,6 +32,7 @@
 #include <svx/svdobj.hxx>
 #include <svx/ColorSets.hxx>
 #include <unotools/weakref.hxx>
+#include <basegfx/units/Length.hxx>
 #include <memory>
 #include <optional>
 #include <vector>
@@ -414,8 +415,8 @@ private:
     SdrModel&                   mrSdrModelFromSdrPage;
 
 private:
-    tools::Long mnWidth;       // page size
-    tools::Long mnHeight;      // page size
+    gfx::Size2DL maSize;
+
     sal_Int32 mnBorderLeft;  // left page margin
     sal_Int32 mnBorderUpper; // top page margin
     sal_Int32 mnBorderRight; // right page margin
@@ -476,12 +477,35 @@ public:
     void setPageBorderOnlyLeftRight(bool bNew) { mbPageBorderOnlyLeftRight = bNew; }
     bool getPageBorderOnlyLeftRight() const { return mbPageBorderOnlyLeftRight; }
 
-    virtual void SetSize(const Size& aSiz);
-    Size GetSize() const;
+    virtual void setSize(gfx::Size2DL const& rSize);
+
+    const gfx::Size2DL& getSize() const
+    {
+        return maSize;
+    }
+
+    Size GetSizeHmm() const
+    {
+        return gfx::length::toSizeHmm(maSize);
+    }
+
+    gfx::Range2DL getRectangle() const
+    {
+        return gfx::Range2DL(0_emu, 0_emu, maSize.getWidth(), maSize.getHeight());
+    }
+
+    gfx::Range2DL getInnerRectangle() const
+    {
+        auto left = gfx::Length::hmm(mnBorderLeft);
+        auto upper = gfx::Length::hmm(mnBorderUpper);
+        auto right = gfx::Length::hmm(mnBorderRight);
+        auto lower = gfx::Length::hmm(mnBorderLower);
+
+        return gfx::Range2DL(left, upper, maSize.getWidth() - right, maSize.getHeight() - lower);
+    }
+
     virtual void SetOrientation(Orientation eOri);
     virtual Orientation GetOrientation() const;
-    tools::Long GetWidth() const;
-    tools::Long GetHeight() const;
     virtual void  SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32 Lwr);
     virtual void  SetLeftBorder(sal_Int32 nBorder);
     virtual void  SetUpperBorder(sal_Int32 nBorder);
