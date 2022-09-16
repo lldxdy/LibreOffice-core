@@ -1671,11 +1671,11 @@ bool HtmlExport::CreateHtmlForPresPages()
                 Point     aLogPos(aRect.TopLeft());
                 bool      bIsSquare = aRect.GetWidth() == aRect.GetHeight();
 
-                sal_Int32 nPageWidth = pPage->GetSizeHmm().Width() - pPage->GetLeftBorder() - pPage->GetRightBorder();
+                sal_Int32 nPageWidth = basegfx::fround((pPage->getSize().getWidth() - pPage->getBorder().getLeft() - pPage->getBorder().getRight()).as_hmm());
 
                 // BoundRect is relative to the physical page origin, not the
                 // origin of ordinates
-                aRect.Move(-pPage->GetLeftBorder(), -pPage->GetUpperBorder());
+                aRect.Move(-pPage->getBorder().getLeft().as_hmm(), -pPage->getBorder().getUpper().as_hmm());
 
                 double fLogicToPixel = static_cast<double>(mnWidthPixel) / nPageWidth;
                 aRect.SetLeft( static_cast<tools::Long>(aRect.Left() * fLogicToPixel) );
@@ -1724,8 +1724,8 @@ bool HtmlExport::CreateHtmlForPresPages()
                                                  GetRectangle(false));
 
                                 // conversion into pixel coordinates
-                                aArea.Move(aLogPos.X() - pPage->GetLeftBorder(),
-                                           aLogPos.Y() - pPage->GetUpperBorder());
+                                aArea.Move(aLogPos.X() - pPage->getBorder().getLeft().as_hmm(),
+                                           aLogPos.Y() - pPage->getBorder().getUpper().as_hmm());
                                 aArea.SetLeft( static_cast<tools::Long>(aArea.Left() * fLogicToPixel) );
                                 aArea.SetTop( static_cast<tools::Long>(aArea.Top() * fLogicToPixel) );
                                 aArea.SetRight( static_cast<tools::Long>(aArea.Right() * fLogicToPixel) );
@@ -1739,8 +1739,8 @@ bool HtmlExport::CreateHtmlForPresPages()
                             {
                                 Point aCenter(static_cast<IMapCircleObject*>(pArea)->
                                                  GetCenter(false));
-                                aCenter += Point(aLogPos.X() - pPage->GetLeftBorder(),
-                                                 aLogPos.Y() - pPage->GetUpperBorder());
+                                aCenter += Point(aLogPos.X() - pPage->getBorder().getLeft().as_hmm(),
+                                                 aLogPos.Y() - pPage->getBorder().getUpper().as_hmm());
                                 aCenter.setX( static_cast<tools::Long>(aCenter.X() * fLogicToPixel) );
                                 aCenter.setY( static_cast<tools::Long>(aCenter.Y() * fLogicToPixel) );
 
@@ -1757,8 +1757,8 @@ bool HtmlExport::CreateHtmlForPresPages()
                             {
                                 tools::Polygon aArea(static_cast<IMapPolygonObject*>(pArea)->GetPolygon(false));
                                 aStr.append(CreateHTMLPolygonArea(::basegfx::B2DPolyPolygon(aArea.getB2DPolygon()),
-                                                                  Size(aLogPos.X() - pPage->GetLeftBorder(),
-                                                                       aLogPos.Y() - pPage->GetUpperBorder()),
+                                                                  Size(aLogPos.X() - pPage->getBorder().getLeft().as_hmm(),
+                                                                       aLogPos.Y() - pPage->getBorder().getUpper().as_hmm()),
                                                                   fLogicToPixel, aURL));
                             }
                             break;
@@ -1861,7 +1861,8 @@ bool HtmlExport::CreateHtmlForPresPages()
                                   pObject->GetObjIdentifier() == SdrObjKind::PolyLine ||
                                   pObject->GetObjIdentifier() == SdrObjKind::Polygon))
                         {
-                            aStr.append(CreateHTMLPolygonArea(static_cast<SdrPathObj*>(pObject)->GetPathPoly(), Size(-pPage->GetLeftBorder(), -pPage->GetUpperBorder()), fLogicToPixel, aHRef));
+                            aStr.append(CreateHTMLPolygonArea(static_cast<SdrPathObj*>(pObject)->GetPathPoly(),
+                                Size(-pPage->getBorder().getLeft().as_hmm(), -pPage->getBorder().getUpper().as_hmm()), fLogicToPixel, aHRef));
                         }
                         // something completely different: use the BoundRect
                         else

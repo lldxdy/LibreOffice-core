@@ -256,8 +256,8 @@ void DrawViewShell::GetMarginProperties( SfxItemSet &rSet )
             {
                 // const SvxLRSpaceItem aTmpPageLRSpace ( rDesc.GetMaster().GetLRSpace() );
                 const SvxLongLRSpaceItem aLongLR(
-                    static_cast<::tools::Long>(pPage->GetLeftBorder()),
-                    static_cast<::tools::Long>(pPage->GetRightBorder()),
+                    ::tools::Long(pPage->getBorder().getLeft().as_hmm()),
+                    ::tools::Long(pPage->getBorder().getRight().as_hmm()),
                     SID_ATTR_PAGE_LRSPACE );
                 rSet.Put( aLongLR );
             }
@@ -267,8 +267,8 @@ void DrawViewShell::GetMarginProperties( SfxItemSet &rSet )
             {
                 // const SvxULSpaceItem aUL( rDesc.GetMaster().GetULSpace() );
                 SvxLongULSpaceItem aLongUL(
-                    static_cast<::tools::Long>(pPage->GetUpperBorder()),
-                    static_cast<::tools::Long>(pPage->GetLowerBorder()),
+                    ::tools::Long(pPage->getBorder().getUpper().as_hmm()),
+                    ::tools::Long(pPage->getBorder().getLower().as_hmm()),
                     SID_ATTR_PAGE_ULSPACE );
                 rSet.Put( aLongUL );
             }
@@ -1898,8 +1898,8 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                     nRight = static_cast<const SvxLongLRSpaceItem*>(pPoolItem)->GetRight();
                     if (nLeft != -1)
                     {
-                        nUpper  = pPage->GetUpperBorder();
-                        nLower  = pPage->GetLowerBorder();
+                        nUpper  = pPage->getBorder().getUpper().as_hmm();
+                        nLower  = pPage->getBorder().getLower().as_hmm();
                     }
                     SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper, nLower, bScaleAll, eOrientation, nPaperBin, bFullSize );
                 }
@@ -1913,8 +1913,8 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                     nLower = static_cast<const SvxLongULSpaceItem*>(pPoolItem)->GetLower();
                     if (nUpper != -1)
                     {
-                        nLeft   = pPage->GetLeftBorder();
-                        nRight  = pPage->GetRightBorder();
+                        nLeft   = pPage->getBorder().getLeft().as_hmm();
+                        nRight  = pPage->getBorder().getRight().as_hmm();
                     }
                     SetPageSizeAndBorder(ePageKind, aNewSize, nLeft, nRight, nUpper, nLower, bScaleAll, eOrientation, nPaperBin, bFullSize );
                 }

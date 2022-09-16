@@ -726,9 +726,9 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
                 // PageBackground (formerly 'wiese').
                 pView->SetPagePaintingAllowed(false);
 
-                const Point aNewOrg( pPage->GetLeftBorder(), pPage->GetUpperBorder() );
-                aNewSize = Size( aSize.Width() - pPage->GetLeftBorder() - pPage->GetRightBorder(),
-                                 aSize.Height() - pPage->GetUpperBorder() - pPage->GetLowerBorder() );
+                const Point aNewOrg(pPage->getLeftBorder().as_hmm(), pPage->getUpperBorder().as_hmm());
+                aNewSize = Size(aSize.Width() - (pPage->getLeftBorder() - pPage->getRightBorder()).as_hmm(),
+                                aSize.Height() - (pPage->getUpperBorder() - pPage->getLowerBorder()).as_hmm());
                 const tools::Rectangle aClipRect( aNewOrg, aNewSize );
                 MapMode         aVMap( aMap );
 

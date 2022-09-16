@@ -506,7 +506,8 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
     const Size aViewSize(nWidth * 3, nHeight * 2);
     Point aVisAreaPos;
     ::sd::View* pView(GetView());
-    const Point aNewOrigin(pPage->GetLeftBorder(), pPage->GetUpperBorder());
+    const Point aNewOrigin(pPage->getBorder().getLeft().as_hmm(),
+                           pPage->getBorder().getUpper().as_hmm());
 
     InitWindows(aPageOrg, aViewSize, Point(-1, -1), true);
 

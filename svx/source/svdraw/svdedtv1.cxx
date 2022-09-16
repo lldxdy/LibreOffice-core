@@ -1553,9 +1553,8 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr, bool addPageMargin
     {
         if (addPageMargin)
         {
-            SdrPage * pPage = GetSdrPageView()->GetPage();
-            Point upperLeft(pPage->GetLeftBorder(), pPage->GetUpperBorder());
-            aRect.Move(upperLeft.getX(), upperLeft.getY());
+            SdrPage* pPage = GetSdrPageView()->GetPage();
+            aRect.Move(pPage->getLeftBorder().as_hmm(), pPage->getUpperBorder().as_hmm());
         }
         GetSdrPageView()->LogicToPagePos(aRect);
     }

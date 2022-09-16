@@ -404,10 +404,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
 
     // set page size
     pPage->setSize(pExample->getSize());
-    pPage->SetBorder( pExample->GetLeftBorder(),
-                      pExample->GetUpperBorder(),
-                      pExample->GetRightBorder(),
-                      pExample->GetLowerBorder() );
+    pPage->setBorder(pExample->getBorder());
 
     // create new presentation objects (after <Title> or <Title with subtitle>
     // follows <Title with outline>, otherwise apply the layout of the previous
@@ -443,10 +440,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
 
     // set page size, there must be already one page available
     pNotesPage->setSize(pExample->getSize());
-    pNotesPage->SetBorder( pExample->GetLeftBorder(),
-                           pExample->GetUpperBorder(),
-                           pExample->GetRightBorder(),
-                           pExample->GetLowerBorder() );
+    pNotesPage->setBorder(pExample->getBorder());
 
     // create presentation objects
     pNotesPage->SetAutoLayout(pExample->GetAutoLayout(), true);

@@ -353,6 +353,51 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
+namespace svx
+{
+
+class Border
+{
+private:
+    gfx::Length maLeft;
+    gfx::Length maRight;
+    gfx::Length maUpper;
+    gfx::Length maLower;
+public:
+    Border()
+        : maLeft(0_emu)
+        , maRight(0_emu)
+        , maUpper(0_emu)
+        , maLower(0_emu)
+    {}
+
+    gfx::Length const& getLeft() const { return maLeft; }
+    gfx::Length const& getRight() const { return maRight; }
+    gfx::Length const& getUpper() const { return maUpper; }
+    gfx::Length const& getLower() const { return maLower; }
+
+    void setLeft(gfx::Length const& rLeft)
+    {
+        maLeft = rLeft;
+    }
+
+    void setRight(gfx::Length const& rRight)
+    {
+        maRight = rRight;
+    }
+
+    void setUpper(gfx::Length const& rUpper)
+    {
+        maUpper = rUpper;
+    }
+
+    void setLower(gfx::Length const& rLower)
+    {
+        maLower = rLower;
+    }
+};
+
+} // end svx
 
 /**
   A SdrPage contains exactly one SdrObjList and a description of the physical
@@ -417,10 +462,8 @@ private:
 private:
     gfx::Size2DL maSize;
 
-    sal_Int32 mnBorderLeft;  // left page margin
-    sal_Int32 mnBorderUpper; // top page margin
-    sal_Int32 mnBorderRight; // right page margin
-    sal_Int32 mnBorderLower; // bottom page margin
+    svx::Border maBorder;
+
     bool mbBackgroundFullSize = false; ///< Background object to represent the whole page.
 
     std::unique_ptr<SdrLayerAdmin> mpLayerAdmin;
@@ -496,25 +539,35 @@ public:
 
     gfx::Range2DL getInnerRectangle() const
     {
-        auto left = gfx::Length::hmm(mnBorderLeft);
-        auto upper = gfx::Length::hmm(mnBorderUpper);
-        auto right = gfx::Length::hmm(mnBorderRight);
-        auto lower = gfx::Length::hmm(mnBorderLower);
-
-        return gfx::Range2DL(left, upper, maSize.getWidth() - right, maSize.getHeight() - lower);
+        return gfx::Range2DL(maBorder.getLeft(), maBorder.getUpper(),
+                             maSize.getWidth() - maBorder.getRight(),
+                             maSize.getHeight() - maBorder.getLower());
     }
 
     virtual void SetOrientation(Orientation eOri);
     virtual Orientation GetOrientation() const;
-    virtual void  SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32 Lwr);
+
+    virtual svx::Border const& getBorder() const
+    {
+        return maBorder;
+    }
+
+    virtual void setBorder(svx::Border const& rBorder)
+    {
+        maBorder = rBorder;
+    }
+
+    virtual void  SetBorder(sal_Int32 nLeft, sal_Int32 nUpper, sal_Int32 nRight, sal_Int32 Lower);
     virtual void  SetLeftBorder(sal_Int32 nBorder);
     virtual void  SetUpperBorder(sal_Int32 nBorder);
     virtual void  SetRightBorder(sal_Int32 nBorder);
     virtual void  SetLowerBorder(sal_Int32 nBorder);
-    sal_Int32 GetLeftBorder() const;
-    sal_Int32 GetUpperBorder() const;
-    sal_Int32 GetRightBorder() const;
-    sal_Int32 GetLowerBorder() const;
+
+    gfx::Length getLeftBorder() const { return maBorder.getLeft(); }
+    gfx::Length getUpperBorder() const { return maBorder.getUpper(); }
+    gfx::Length getRightBorder() const { return maBorder.getRight(); }
+    gfx::Length getLowerBorder() const { return maBorder.getLower(); }
+
     void    SetBackgroundFullSize(bool bIn);
     bool    IsBackgroundFullSize() const;
 

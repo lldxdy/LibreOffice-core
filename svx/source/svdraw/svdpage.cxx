@@ -1326,10 +1326,6 @@ void SdrPageProperties::dumpAsXml(xmlTextWriterPtr pWriter) const
 SdrPage::SdrPage(SdrModel& rModel, bool bMasterPage)
 :   mrSdrModelFromSdrPage(rModel),
     maSize(10_hmm, 10_hmm),
-    mnBorderLeft(0),
-    mnBorderUpper(0),
-    mnBorderRight(0),
-    mnBorderLower(0),
     mpLayerAdmin(new SdrLayerAdmin(&rModel.GetLayerAdmin())),
     nPageNum(0),
     mbMaster(bMasterPage),
@@ -1387,10 +1383,7 @@ void SdrPage::lateInit(const SdrPage& rSrcPage)
     mbMaster = rSrcPage.mbMaster;
     mbPageBorderOnlyLeftRight = rSrcPage.mbPageBorderOnlyLeftRight;
     maSize = rSrcPage.maSize;
-    mnBorderLeft = rSrcPage.mnBorderLeft;
-    mnBorderUpper = rSrcPage.mnBorderUpper;
-    mnBorderRight = rSrcPage.mnBorderRight;
-    mnBorderLower = rSrcPage.mnBorderLower;
+    maBorder = rSrcPage.maBorder;
     mbBackgroundFullSize = rSrcPage.mbBackgroundFullSize;
     nPageNum = rSrcPage.nPageNum;
 
@@ -1467,94 +1460,81 @@ Orientation SdrPage::GetOrientation() const
 }
 
 
-void  SdrPage::SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32 nLwr)
+void  SdrPage::SetBorder(sal_Int32 nLeftHmm, sal_Int32 nUpperHmm, sal_Int32 nRightHmm, sal_Int32 nLowerHmm)
 {
     bool bChanged(false);
 
-    if(mnBorderLeft != nLft)
+    auto left = gfx::Length::hmm(nLeftHmm);
+    auto upper = gfx::Length::hmm(nUpperHmm);
+    auto right = gfx::Length::hmm(nRightHmm);
+    auto lower = gfx::Length::hmm(nLowerHmm);
+
+    if (maBorder.getLeft() != left)
     {
-        mnBorderLeft = nLft;
+        maBorder.setLeft(left);
         bChanged = true;
     }
 
-    if(mnBorderUpper != nUpp)
+    if (maBorder.getUpper() != upper)
     {
-        mnBorderUpper = nUpp;
+        maBorder.setUpper(upper);
         bChanged = true;
     }
 
-    if(mnBorderRight != nRgt)
+    if (maBorder.getRight() != right)
     {
-        mnBorderRight = nRgt;
+        maBorder.setRight(right);
         bChanged = true;
     }
 
-    if(mnBorderLower != nLwr)
+    if (maBorder.getLower() != lower)
     {
-        mnBorderLower =  nLwr;
+        maBorder.setLower(lower);
         bChanged = true;
     }
 
-    if(bChanged)
+    if (bChanged)
+        SetChanged();
+}
+
+void  SdrPage::SetLeftBorder(sal_Int32 nBorderHmm)
+{
+    auto nBorder = gfx::Length::hmm(nBorderHmm);
+    if (maBorder.getLeft() != nBorder)
     {
+        maBorder.setLeft(nBorder);
         SetChanged();
     }
 }
 
-void  SdrPage::SetLeftBorder(sal_Int32 nBorder)
+void  SdrPage::SetUpperBorder(sal_Int32 nBorderHmm)
 {
-    if(mnBorderLeft != nBorder)
+    auto nBorder = gfx::Length::hmm(nBorderHmm);
+    if (maBorder.getUpper() != nBorder)
     {
-        mnBorderLeft = nBorder;
+        maBorder.setUpper(nBorder);
         SetChanged();
     }
 }
 
-void  SdrPage::SetUpperBorder(sal_Int32 nBorder)
+void  SdrPage::SetRightBorder(sal_Int32 nBorderHmm)
 {
-    if(mnBorderUpper != nBorder)
+    auto nBorder = gfx::Length::hmm(nBorderHmm);
+    if (maBorder.getRight() != nBorder)
     {
-        mnBorderUpper = nBorder;
+        maBorder.setRight(nBorder);
         SetChanged();
     }
 }
 
-void  SdrPage::SetRightBorder(sal_Int32 nBorder)
+void  SdrPage::SetLowerBorder(sal_Int32 nBorderHmm)
 {
-    if(mnBorderRight != nBorder)
+    auto nBorder = gfx::Length::hmm(nBorderHmm);
+    if (maBorder.getLower() != nBorder)
     {
-        mnBorderRight=nBorder;
+        maBorder.setLower(nBorder);
         SetChanged();
     }
-}
-
-void  SdrPage::SetLowerBorder(sal_Int32 nBorder)
-{
-    if(mnBorderLower != nBorder)
-    {
-        mnBorderLower=nBorder;
-        SetChanged();
-    }
-}
-
-sal_Int32 SdrPage::GetLeftBorder() const
-{
-    return mnBorderLeft;
-}
-
-sal_Int32 SdrPage::GetUpperBorder() const
-{
-    return mnBorderUpper;
-}
-
-sal_Int32 SdrPage::GetRightBorder() const
-{
-    return mnBorderRight;
-}
-
-sal_Int32 SdrPage::GetLowerBorder() const
-{
-    return mnBorderLower;
 }
 
 void SdrPage::SetBackgroundFullSize(bool const bIn)

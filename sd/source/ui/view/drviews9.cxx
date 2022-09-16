@@ -93,8 +93,8 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
         // constrain size to page size if necessary
         SdrPage* pPage = mpDrawView->GetSdrPageView()->GetPage();
         Size aPageSize = pPage->GetSizeHmm();
-        aPageSize.AdjustWidth( -(pPage->GetLeftBorder() + pPage->GetRightBorder()) );
-        aPageSize.AdjustHeight( -(pPage->GetUpperBorder() + pPage->GetLowerBorder()) );
+        aPageSize.AdjustWidth(-basegfx::fround((pPage->getBorder().getLeft() + pPage->getBorder().getRight()).as_hmm()) );
+        aPageSize.AdjustHeight(-basegfx::fround((pPage->getBorder().getUpper() + pPage->getBorder().getLower()).as_hmm()) );
 
         // If the image is too large we make it fit into the page
         if ( ( ( aSize.Height() > aPageSize.Height() ) || ( aSize.Width()   > aPageSize.Width() ) ) &&
@@ -121,7 +121,8 @@ void DrawViewShell::ExecGallery(SfxRequest const & rReq)
         // set output rectangle for graphic
         Point aPnt ((aPageSize.Width()  - aSize.Width())  / 2,
                     (aPageSize.Height() - aSize.Height()) / 2);
-        aPnt += Point(pPage->GetLeftBorder(), pPage->GetUpperBorder());
+        aPnt += Point(pPage->getBorder().getLeft().as_hmm(),
+                      pPage->getBorder().getUpper().as_hmm());
         ::tools::Rectangle aRect (aPnt, aSize);
 
         rtl::Reference<SdrGrafObj> pGrafObj;

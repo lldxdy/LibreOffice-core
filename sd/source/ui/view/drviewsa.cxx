@@ -514,7 +514,8 @@ void DrawViewShell::SetupPage (Size const &rSize,
 
     UpdateScrollBars();
 
-    Point aNewOrigin(mpActualPage->GetLeftBorder(), mpActualPage->GetUpperBorder());
+    Point aNewOrigin(mpActualPage->getBorder().getLeft().as_hmm(),
+                     mpActualPage->getBorder().getUpper().as_hmm());
     GetView()->GetSdrPageView()->SetPageOrigin(aNewOrigin);
 
     GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);

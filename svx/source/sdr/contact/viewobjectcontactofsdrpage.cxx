@@ -338,7 +338,7 @@ bool ViewObjectContactOfInnerPageBorder::isPrimitiveVisible(const DisplayInfo& r
 
     const SdrPage& rPage = getPage();
 
-    if(!rPage.GetLeftBorder() && !rPage.GetUpperBorder() && !rPage.GetRightBorder() && !rPage.GetLowerBorder())
+    if (rPage.getLeftBorder() == 0_emu && rPage.getUpperBorder() == 0_emu && rPage.getRightBorder() == 0_emu && rPage.getLowerBorder() == 0_emu)
     {
         return false;
     }
@@ -425,17 +425,17 @@ void ViewObjectContactOfPageGrid::createPrimitive2DSequence(const DisplayInfo& /
         const SdrView& rView = pPageView->GetView();
         const SdrPage& rPage = getPage();
 
-        const double fPageWidth(rPage.getSize().getWidth().as_hmm());
-        const double fPageHeight(rPage.getSize().getHeight().as_hmm());
+        const gfx::Length aPageWidth(rPage.getSize().getWidth());
+        const gfx::Length aPageHeight(rPage.getSize().getHeight());
 
         const Color aGridColor(rView.GetGridColor());
         const basegfx::BColor aRGBGridColor(aGridColor.getBColor());
 
         basegfx::B2DHomMatrix aGridMatrix;
-        aGridMatrix.set(0, 0, static_cast<double>(fPageWidth - (rPage.GetRightBorder() + rPage.GetLeftBorder())));
-        aGridMatrix.set(1, 1, static_cast<double>(fPageHeight - (rPage.GetLowerBorder() + rPage.GetUpperBorder())));
-        aGridMatrix.set(0, 2, static_cast<double>(rPage.GetLeftBorder()));
-        aGridMatrix.set(1, 2, static_cast<double>(rPage.GetUpperBorder()));
+        aGridMatrix.set(0, 0, (aPageWidth - (rPage.getRightBorder() + rPage.getLeftBorder())).as_hmm());
+        aGridMatrix.set(1, 1, (aPageHeight - (rPage.getLowerBorder() + rPage.getUpperBorder())).as_hmm());
+        aGridMatrix.set(0, 2, rPage.getLeftBorder().as_hmm());
+        aGridMatrix.set(1, 2, rPage.getUpperBorder().as_hmm());
 
         const Size aRaw(rView.GetGridCoarse());
         const Size aFine(rView.GetGridFine());

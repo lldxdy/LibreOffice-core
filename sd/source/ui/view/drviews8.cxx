@@ -64,8 +64,8 @@ void DrawViewShell::ScannerEvent()
                     else
                         aBmpSize = OutputDevice::LogicToLogic( aBmpSize, aScanBmp.GetPrefMapMode(), aMap100 );
 
-                    aPageSize.AdjustWidth( -(pPage->GetLeftBorder() + pPage->GetRightBorder()) );
-                    aPageSize.AdjustHeight( -(pPage->GetUpperBorder() + pPage->GetLowerBorder()) );
+                    aPageSize.AdjustWidth(-basegfx::fround((pPage->getBorder().getLeft() + pPage->getBorder().getRight()).as_hmm()) );
+                    aPageSize.AdjustHeight(-basegfx::fround((pPage->getBorder().getUpper() + pPage->getBorder().getLower()).as_hmm()) );
 
                     if( ( ( aBmpSize.Height() > aPageSize.Height() ) || ( aBmpSize.Width() > aPageSize.Width() ) ) && aBmpSize.Height() && aPageSize.Height() )
                     {
@@ -85,7 +85,8 @@ void DrawViewShell::ScannerEvent()
                     }
 
                     Point aPnt ( ( aPageSize.Width() - aBmpSize.Width() ) >> 1, ( aPageSize.Height() - aBmpSize.Height() ) >> 1 );
-                    aPnt += Point( pPage->GetLeftBorder(), pPage->GetUpperBorder() );
+                    aPnt += Point(pPage->getBorder().getLeft().as_hmm(),
+                                  pPage->getBorder().getUpper().as_hmm());
                     ::tools::Rectangle   aRect( aPnt, aBmpSize );
                     bool        bInsertNewObject = true;
 

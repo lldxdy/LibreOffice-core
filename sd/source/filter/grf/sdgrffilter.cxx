@@ -162,8 +162,8 @@ bool SdGRFFilter::Import()
         Size        aGrfSize( OutputDevice::LogicToLogic( aGraphic.GetPrefSize(),
                                 aGraphic.GetPrefMapMode(), MapMode(MapUnit::Map100thMM)));
 
-        aPagSize.AdjustWidth( -(pPage->GetLeftBorder() + pPage->GetRightBorder()) );
-        aPagSize.AdjustHeight( -(pPage->GetUpperBorder() + pPage->GetLowerBorder()) );
+        aPagSize.AdjustWidth(-basegfx::fround((pPage->getBorder().getLeft() + pPage->getBorder().getRight()).as_hmm()));
+        aPagSize.AdjustHeight(-basegfx::fround((pPage->getBorder().getUpper() + pPage->getBorder().getLower()).as_hmm()));
 
         // scale to fit page
         if ( ( ( aGrfSize.Height() > aPagSize.Height() ) || ( aGrfSize.Width() > aPagSize.Width() ) ) &&
@@ -186,8 +186,8 @@ bool SdGRFFilter::Import()
         }
 
         // set output rectangle for graphic
-        aPos.setX( ( ( aPagSize.Width() - aGrfSize.Width() ) >> 1 ) + pPage->GetLeftBorder() );
-        aPos.setY( ( ( aPagSize.Height() - aGrfSize.Height() ) >> 1 )  + pPage->GetUpperBorder() );
+        aPos.setX( ( ( aPagSize.Width() - aGrfSize.Width() ) / 2.0 ) + pPage->getBorder().getLeft().as_hmm());
+        aPos.setY( ( ( aPagSize.Height() - aGrfSize.Height() ) / 2.0 ) + pPage->getBorder().getRight().as_hmm());
 
         pPage->InsertObject(
             new SdrGrafObj(

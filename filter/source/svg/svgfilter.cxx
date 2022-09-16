@@ -321,12 +321,12 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
             // in comparison. Use a common scaling factor for hor/ver to not get
             // asynchronous border distances, though. All in all this will adapt borders
             // nicely and is based on office-defaults for standard-page-border-sizes.
-            const Size aPageSize = gfx::length::toSizeHmm(pTargetSdrPage->getSize());
+            const gfx::Size2DL aPageSize = pTargetSdrPage->getSize();
             const double fBorderRelation((
-                static_cast< double >(pTargetSdrPage->GetLeftBorder()) / aPageSize.Width() +
-                static_cast< double >(pTargetSdrPage->GetRightBorder()) / aPageSize.Width() +
-                static_cast< double >(pTargetSdrPage->GetUpperBorder()) / aPageSize.Height() +
-                static_cast< double >(pTargetSdrPage->GetLowerBorder()) / aPageSize.Height()) / 4.0);
+                pTargetSdrPage->getLeftBorder().as_emu() / aPageSize.getWidth().as_emu() +
+                pTargetSdrPage->getRightBorder().as_emu() / aPageSize.getWidth().as_emu() +
+                pTargetSdrPage->getUpperBorder().as_emu() / aPageSize.getHeight().as_emu() +
+                pTargetSdrPage->getLowerBorder().as_emu() / aPageSize.getHeight().as_emu()) / 4.0);
             const tools::Long nAllBorder(basegfx::fround((aGraphicSize.Width() + aGraphicSize.Height()) * fBorderRelation * 0.5));
 
             // Adapt PageSize and Border stuff. To get all MasterPages and PresObjs

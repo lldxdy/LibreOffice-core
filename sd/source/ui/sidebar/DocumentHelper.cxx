@@ -363,11 +363,11 @@ SdPage* DocumentHelper::AddMasterPage (
         // the document.
         auto pPage = rTargetDocument.GetSdPage(0, pMasterPage->GetPageKind());
         Size aNewSize = pPage->GetSizeHmm();
-        ::tools::Rectangle aBorders (
-            pClonedMasterPage->GetLeftBorder(),
-            pClonedMasterPage->GetUpperBorder(),
-            pClonedMasterPage->GetRightBorder(),
-            pClonedMasterPage->GetLowerBorder());
+        ::tools::Rectangle aBorders(
+            pClonedMasterPage->getBorder().getLeft().as_hmm(),
+            pClonedMasterPage->getBorder().getUpper().as_hmm(),
+            pClonedMasterPage->getBorder().getRight().as_hmm(),
+            pClonedMasterPage->getBorder().getLower().as_hmm());
         pClonedMasterPage->ScaleObjects(aNewSize, aBorders, true);
         pClonedMasterPage->setSize(pPage->getSize());
         pClonedMasterPage->CreateTitleAndLayout(true);

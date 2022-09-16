@@ -96,8 +96,8 @@ SdrPageView::SdrPageView(SdrPage* pPage1, SdrView& rNewView)
 
     if(mpPage)
     {
-        maPageOrigin.setX(mpPage->GetLeftBorder() );
-        maPageOrigin.setY(mpPage->GetUpperBorder() );
+        maPageOrigin.setX(mpPage->getLeftBorder().as_hmm());
+        maPageOrigin.setY(mpPage->getUpperBorder().as_hmm());
     }
     // For example, in the case of charts, there is a LayerAdmin, but it has no valid values. Therefore
     // a solution like pLayerAdmin->getVisibleLayersODF(aLayerVisi) is not possible. So use the
@@ -452,16 +452,16 @@ void SdrPageView::DrawPageViewGrid(OutputDevice& rOut, const tools::Rectangle& r
     auto aPageSize = GetPage()->getSize();
     if (aPageSize.getWidth() < 0_emu) // ScDrawPage of RTL sheet
     {
-        x1 = aPageSize.getWidth().as_hmm() + GetPage()->GetLeftBorder() + 1;
-        x2 = - GetPage()->GetRightBorder() - 1;
+        x1 = (aPageSize.getWidth() + GetPage()->getLeftBorder() + 1_hmm).as_hmm();
+        x2 = (-GetPage()->getRightBorder() - 1_hmm).as_hmm();
     }
     else
     {
-        x1 = GetPage()->GetLeftBorder() + 1;
-        x2 = aPageSize.getWidth().as_hmm() - GetPage()->GetRightBorder() - 1;
+        x1 = (GetPage()->getLeftBorder() + 1_hmm).as_hmm();
+        x2 = (aPageSize.getWidth() - GetPage()->getRightBorder() - 1_hmm).as_hmm();
     }
-    tools::Long y1 = GetPage()->GetUpperBorder() + 1;
-    tools::Long y2 = aPageSize.getHeight().as_hmm() - GetPage()->GetLowerBorder() - 1;
+    tools::Long y1 = (GetPage()->getUpperBorder() + 1_hmm).as_hmm();
+    tools::Long y2 = (aPageSize.getHeight() - GetPage()->getLowerBorder() - 1_hmm).as_hmm();
     const SdrPageGridFrameList* pFrames=GetPage()->GetGridFrameList(this,nullptr);
 
     sal_uInt16 nGridPaintCnt=1;

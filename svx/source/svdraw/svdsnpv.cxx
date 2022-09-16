@@ -306,10 +306,10 @@ SdrSnap SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
         SdrPage* pPage=pPV->GetPage();
         tools::Long xs = pPage->getSize().getWidth().as_hmm();
         tools::Long ys = pPage->getSize().getHeight().as_hmm();
-        tools::Long lft=pPage->GetLeftBorder();
-        tools::Long rgt=pPage->GetRightBorder();
-        tools::Long upp=pPage->GetUpperBorder();
-        tools::Long lwr=pPage->GetLowerBorder();
+        tools::Long lft = pPage->getLeftBorder().as_hmm();
+        tools::Long rgt = pPage->getRightBorder().as_hmm();
+        tools::Long upp = pPage->getUpperBorder().as_hmm();
+        tools::Long lwr = pPage->getLowerBorder().as_hmm();
         tools::Long a;
         a=x- lft    ; if (std::abs(a)<=mx) { dx1=-a; if (std::abs(dx1)<std::abs(dx)) dx=dx1; } // left margin
         a=x-(xs-rgt); if (std::abs(a)<=mx) { dx1=-a; if (std::abs(dx1)<std::abs(dx)) dx=dx1; } // right margin
