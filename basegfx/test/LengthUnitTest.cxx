@@ -32,11 +32,6 @@ public:
         CPPUNIT_ASSERT_EQUAL(sal_Int64(34200000000), cm3.raw());
         CPPUNIT_ASSERT_DOUBLES_EQUAL(95000.0, cm3.as_cm(), 1e-4);
 
-        gfx::Length cm4(1_cm);
-        cm4 /= 2;
-        CPPUNIT_ASSERT_EQUAL(sal_Int64(180000), cm4.raw());
-        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, cm4.as_cm(), 1e-4);
-
         // (635 * 20) + 3 * (635 * 15) = 41275EMU
         gfx::Length pt = 1_pt + 3_px;
         CPPUNIT_ASSERT_DOUBLES_EQUAL(3.25, pt.as_pt(), 1e-4);
@@ -90,6 +85,23 @@ public:
 
         auto bb = gfx::Length::hmm<double>(10.1);
         CPPUNIT_ASSERT_EQUAL(sal_Int64(3636), bb.raw());
+    }
+
+    void testDivision()
+    {
+        gfx::Length cm(1_cm);
+        cm /= 2;
+        CPPUNIT_ASSERT_EQUAL(sal_Int64(180000), cm.raw());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, cm.as_cm(), 1e-4);
+
+        gfx::Length cm4(1_cm);
+        cm4 /= 2.0;
+        CPPUNIT_ASSERT_EQUAL(sal_Int64(180000), cm4.raw());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, cm4.as_cm(), 1e-4);
+
+        // with division of 2 length units you get a ratio
+        double aRatio = gfx::Length::hmm(10) / gfx::Length::hmm(20);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(0.5, aRatio, 1e-9);
     }
 
     void testInRange()
@@ -159,6 +171,7 @@ public:
 
     CPPUNIT_TEST_SUITE(LengthTest);
     CPPUNIT_TEST(testBasic);
+    CPPUNIT_TEST(testDivision);
     CPPUNIT_TEST(testInRange);
     CPPUNIT_TEST(testInTuple);
     CPPUNIT_TEST(testConversionToRectanle);

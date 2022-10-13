@@ -173,14 +173,25 @@ inline LengthUnitBase<T> operator-(LengthUnitBase<T> lhs, const LengthUnitBase<T
     return lhs -= rhs;
 }
 
+/// Multiplication of a length unit with a scalar value.
+/// example 1cm * 2 = 2cm
 template <typename T> inline LengthUnitBase<T> operator*(LengthUnitBase<T> lhs, const long rhs)
 {
     return lhs *= rhs;
 }
 
+/// Division of a length unit with a scalar value.
+/// example 1cm / 2 = 0.5cm
 template <typename T> inline LengthUnitBase<T> operator/(LengthUnitBase<T> lhs, const long rhs)
 {
     return lhs /= rhs;
+}
+
+/// Division of 2 length units, which results in a ratio.
+/// example 1cm / 2cm = 0.5
+template <typename T> inline double operator/(LengthUnitBase<T> lhs, const LengthUnitBase<T> rhs)
+{
+    return lhs.raw() / double(rhs.raw());
 }
 
 } // end namespace gfx
