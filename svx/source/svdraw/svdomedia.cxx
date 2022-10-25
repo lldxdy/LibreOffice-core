@@ -245,7 +245,7 @@ void SdrMediaObj::AdjustToMaxRect( const tools::Rectangle& rMaxRect, bool bShrin
     }
 
     if( bShrinkOnly )
-        aPos = maRect.TopLeft();
+        aPos = getRectangle().TopLeft();
 
     aPos.AdjustX( -(aSize.Width() / 2) );
     aPos.AdjustY( -(aSize.Height() / 2) );
