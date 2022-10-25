@@ -223,6 +223,15 @@ namespace basegfx
             }
         }
 
+        void shift(T nValue)
+        {
+            if (isEmpty())
+                return;
+
+            mnMinimum += nValue;
+            mnMaximum += nValue;
+        }
+
         void grow(T nValue)
         {
             if(isEmpty())

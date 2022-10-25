@@ -25,11 +25,16 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b2irange.hxx>
 
+#include <tools/gen.hxx>
+
 class B2DRangeTest : public CppUnit::TestFixture
 {
     void testCreation()
     {
         basegfx::B2DRange aRange(1.2, 2.3, 3.5, 4.8);
+
+        CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(1.2, 2.3, 3.5, 4.8), aRange);
+
         CPPUNIT_ASSERT_EQUAL(1.2, aRange.getMinX());
         CPPUNIT_ASSERT_EQUAL(3.5, aRange.getMaxX());
         CPPUNIT_ASSERT_EQUAL(2.3, aRange.getMinY());
@@ -37,6 +42,20 @@ class B2DRangeTest : public CppUnit::TestFixture
 
         CPPUNIT_ASSERT_EQUAL(2.3, aRange.getWidth());
         CPPUNIT_ASSERT_EQUAL(2.5, aRange.getHeight());
+
+        // wrong order of the interval
+        basegfx::B2DRange aRange2(1.0, 1.0, 0.0, 0.0);
+
+        CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(1.0, 1.0, 0.0, 0.0), aRange2);
+        CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0), aRange2);
+
+        CPPUNIT_ASSERT_EQUAL(0.0, aRange2.getMinX());
+        CPPUNIT_ASSERT_EQUAL(0.0, aRange2.getMinY());
+        CPPUNIT_ASSERT_EQUAL(1.0, aRange2.getMaxX());
+        CPPUNIT_ASSERT_EQUAL(1.0, aRange2.getMaxY());
+
+        CPPUNIT_ASSERT_EQUAL(1.0, aRange2.getWidth());
+        CPPUNIT_ASSERT_EQUAL(1.0, aRange2.getHeight());
     }
 
     void testRound()
@@ -53,6 +72,25 @@ class B2DRangeTest : public CppUnit::TestFixture
         CPPUNIT_ASSERT_EQUAL(2.5, aRange.getCenterY());
     }
 
+    void testIntersect()
+    {
+        basegfx::B2DRange aRange(1.0, 1.0, 4.0, 4.0);
+        aRange.intersect(basegfx::B2DRange(0.0, 0.0, 2.0, 2.0));
+
+        CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(1.0, 1.0, 2.0, 2.0), aRange);
+    }
+
+    void testShift()
+    {
+        basegfx::B2DRange aRange(1.0, 1.0, 4.0, 4.0);
+        aRange.shift(0.0, 0.0);
+        CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(1.0, 1.0, 4.0, 4.0), aRange);
+        aRange.shift(1.0, 2.0);
+        CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(2.0, 3.0, 5.0, 6.0), aRange);
+        aRange.shift(-1.0, -2.0);
+        CPPUNIT_ASSERT_EQUAL(basegfx::B2DRange(1.0, 1.0, 4.0, 4.0), aRange);
+    }
+
     // Change the following lines only, if you add, remove or rename
     // member functions of the current class,
     // because these macros are need by auto register mechanism.
@@ -61,6 +99,8 @@ class B2DRangeTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testCreation);
     CPPUNIT_TEST(testRound);
     CPPUNIT_TEST(testCenter);
+    CPPUNIT_TEST(testIntersect);
+    CPPUNIT_TEST(testShift);
     CPPUNIT_TEST_SUITE_END();
 };
 
