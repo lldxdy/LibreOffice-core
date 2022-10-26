@@ -371,6 +371,13 @@ public:
         , maLower(0_emu)
     {}
 
+    Border(gfx::Length const& nLeft, gfx::Length const& nUpper, gfx::Length const& nRight, gfx::Length const& nLower)
+        : maLeft(nLeft)
+        , maRight(nRight)
+        , maUpper(nUpper)
+        , maLower(nLower)
+    {}
+
     gfx::Length const& getLeft() const { return maLeft; }
     gfx::Length const& getRight() const { return maRight; }
     gfx::Length const& getUpper() const { return maUpper; }
